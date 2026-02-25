@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SÉRIE SPECTRE — Galerie 0x7</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@300;400;700&family=Cinzel:wght@400;700;900&display=swap');
+:root{
+  --void:#02010a;--panel:#0e0819;--panel2:#0a0614;
+  --border:#1e1030;--border2:#2a1848;
+  --purple:#7c3aed;--violet:#a855f7;--pink:#ec4899;
+  --gold:#d4a843;--cream:#e8dfc8;--fog:#6b5b8a;
+  --dim:#3d2a5c;--text:#b8a9cc;--white:#f0e8ff;--green:#22c55e;
+  --slider-accent-1:var(--purple);--slider-accent-2:var(--pink);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--text);font-family:'IM Fell English',Georgia,serif;min-height:100vh;cursor:crosshair;}
+.ambient{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 30%,rgba(124,58,237,.1) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 80% 70%,rgba(168,85,247,.07) 0%,transparent 70%);}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.28;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px;}
+#loader{position:fixed;inset:0;z-index:1000;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity 1s,visibility 1s;}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.loader-eye{font-size:3rem;animation:eyePulse 2s ease-in-out infinite;}
+@keyframes eyePulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 8px rgba(168,85,247,.5));}50%{transform:scale(1.15);filter:drop-shadow(0 0 24px rgba(168,85,247,.9));}}
+.loader-txt{font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.4em;color:var(--dim);}
+.loader-bar{width:220px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;}
+.loader-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--purple),var(--violet),var(--pink));animation:loadbar 2.6s ease forwards;}
+@keyframes loadbar{to{width:100%}}
+#site{position:relative;z-index:1;opacity:0;transition:opacity 1s;}
+#site.visible{opacity:1;}
+header{padding:50px 40px 0;display:flex;align-items:flex-start;justify-content:space-between;max-width:1200px;margin:0 auto;}
+.gallery-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.4em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;}
+.artist-name{font-family:'Cinzel',serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;color:var(--white);line-height:1;letter-spacing:.05em;position:relative;}
+.artist-name::after{content:attr(data-text);position:absolute;inset:0;background:linear-gradient(135deg,var(--gold) 0%,var(--violet) 50%,var(--pink) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.65;mix-blend-mode:screen;}
+.artist-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:.9rem;color:var(--fog);margin-top:8px;}
+.header-right{text-align:right;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--dim);line-height:2.2;letter-spacing:.08em;}
+.header-right span{color:var(--violet);}
+.hero-rule{max-width:1200px;margin:36px auto 0;padding:0 40px;display:flex;align-items:center;gap:20px;}
+.rule-line{flex:1;height:1px;background:var(--border);}
+.rule-ornament{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.3em;color:var(--dim);white-space:nowrap;}
+.progress-section{max-width:1200px;margin:48px auto 0;padding:0 40px;}
+.progress-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
+.progress-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;}
+.progress-count{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--violet);}
+.progress-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--purple),var(--violet),var(--pink));border-radius:2px;transition:width .8s ease;}
+.serie-section{max-width:1200px;margin:48px auto 0;padding:0 40px;}
+.serie-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:14px;}
+@media(max-width:900px){.serie-grid{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:560px){.serie-grid{grid-template-columns:repeat(3,1fr);}}
+.spectre-thumb{aspect-ratio:1;border-radius:3px;position:relative;overflow:hidden;cursor:pointer;transition:all .3s;border:1px solid var(--border);}
+.spectre-thumb canvas{width:100%;height:100%;display:block;transition:filter .3s;}
+.spectre-thumb .t-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(2,1,10,.75);transition:all .3s;}
+.spectre-thumb .t-num{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--border2);}
+.spectre-thumb .t-stat{font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);}
+.spectre-thumb.locked{cursor:not-allowed;}
+.spectre-thumb.locked canvas{filter:saturate(.08) brightness(.25);}
+.spectre-thumb.locked .t-overlay{background:rgba(2,1,10,.9);}
+.spectre-thumb.enigma-phase{border-color:rgba(212,168,67,.4);cursor:pointer;}
+.spectre-thumb.enigma-phase .t-num{color:var(--gold);}
+.spectre-thumb.enigma-phase .t-stat{color:var(--gold);}
+.spectre-thumb.enigma-phase:hover{box-shadow:0 0 20px rgba(212,168,67,.25);transform:translateY(-2px);}
+.spectre-thumb.lsb-phase{border-color:rgba(168,85,247,.4);cursor:pointer;}
+.spectre-thumb.lsb-phase .t-num{color:var(--violet);}
+.spectre-thumb.lsb-phase .t-stat{color:var(--violet);}
+.spectre-thumb.lsb-phase:hover{box-shadow:0 0 20px rgba(124,58,237,.25);transform:translateY(-2px);}
+.spectre-thumb.active-tab{border-color:var(--gold)!important;box-shadow:0 0 24px rgba(212,168,67,.2)!important;}
+.spectre-thumb.solved{border-color:rgba(34,197,94,.4);}
+.spectre-thumb.solved canvas{filter:none;}
+.spectre-thumb.solved .t-num{color:var(--green);}
+.spectre-thumb.solved .t-stat{color:var(--green);}
+.spectre-thumb.solved .t-overlay{background:rgba(2,1,10,.45);}
+.lock-ico{font-size:1.1rem;opacity:.35;}
+.ch-panel{max-width:1200px;margin:32px auto 0;padding:0 40px;display:none;}
+.ch-panel.visible{display:block;}
+.ch-card{border:1px solid var(--border2);background:var(--panel);border-radius:4px;overflow:hidden;position:relative;}
+.ch-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--violet),var(--pink));transition:background .5s;}
+.ch-card.solved-card::before{background:linear-gradient(90deg,var(--green),#86efac,var(--green));}
+.ch-card.enigma-card::before{background:linear-gradient(90deg,var(--gold),var(--pink),var(--gold));}
+.ch-card.lsb-card::before{background:linear-gradient(90deg,var(--purple),var(--violet),var(--purple));background-size:200%;animation:slideGrad 3s linear infinite;}
+@keyframes slideGrad{0%{background-position:0%}100%{background-position:200%}}
+.ch-head{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px;}
+.ch-num{font-family:'Cinzel',serif;font-size:3rem;font-weight:900;color:var(--border2);line-height:1;min-width:56px;}
+.ch-info{flex:1;}
+.ch-title{font-family:'Cinzel',serif;font-size:1.25rem;color:var(--white);letter-spacing:.05em;}
+.ch-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:.83rem;color:var(--fog);margin-top:3px;}
+.ch-badge{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:4px 12px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);}
+.ch-badge.enigma-b{background:rgba(212,168,67,.1);border-color:rgba(212,168,67,.3);color:var(--gold);}
+.ch-badge.lsb-b{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3);color:var(--violet);animation:pulseBadge 2s ease-in-out infinite;}
+@keyframes pulseBadge{0%,100%{opacity:1}50%{opacity:.55}}
+.ch-badge.done-b{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--green);}
+.ch-body{display:grid;grid-template-columns:1fr 1.1fr;gap:0;}
+@media(max-width:800px){.ch-body{grid-template-columns:1fr;}}
+.ch-left{padding:22px 26px;border-right:1px solid var(--border);}
+@media(max-width:800px){.ch-left{border-right:none;border-bottom:1px solid var(--border);}}
+.ch-right{padding:22px 26px;}
+.art-frame{position:relative;padding:10px;background:var(--panel2);border:1px solid var(--border2);margin-bottom:14px;box-shadow:0 0 30px rgba(124,58,237,.1),inset 0 0 20px rgba(0,0,0,.4);transition:box-shadow .5s;}
+.art-frame.active-glow{box-shadow:0 0 30px rgba(168,85,247,.25),inset 0 0 20px rgba(0,0,0,.4);}
+.art-frame::before,.art-frame::after{content:'';position:absolute;width:11px;height:11px;border-color:var(--gold);border-style:solid;}
+.art-frame::before{top:4px;left:4px;border-width:1px 0 0 1px;}
+.art-frame::after{bottom:4px;right:4px;border-width:0 1px 1px 0;}
+.art-canvas{display:block;width:100%;}
+.art-caption{font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.2em;color:var(--dim);text-align:center;margin-top:7px;text-transform:uppercase;}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;padding:11px 14px;border-radius:3px;cursor:pointer;transition:all .2s;text-decoration:none;margin-bottom:10px;border:none;}
+.btn-violet{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.35);color:var(--violet);}
+.btn-violet:hover{background:rgba(124,58,237,.22);border-color:var(--violet);}
+.btn-gold{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.3);color:var(--gold);}
+.btn-gold:hover{background:rgba(212,168,67,.22);border-color:var(--gold);}
+.hint-blk{border:1px dashed rgba(212,168,67,.3);background:rgba(212,168,67,.04);border-radius:3px;padding:12px 15px;margin-bottom:14px;}
+.hint-lbl{font-family:'JetBrains Mono',monospace;font-size:.54rem;letter-spacing:.3em;color:rgba(212,168,67,.45);text-transform:uppercase;margin-bottom:5px;}
+.hint-txt{font-style:italic;font-size:.87rem;color:var(--gold);line-height:1.6;}
+.lore-blk{margin-bottom:16px;}
+.lore-lbl{font-family:'JetBrains Mono',monospace;font-size:.54rem;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.lore-txt{font-size:.88rem;line-height:1.82;color:var(--text);}
+.lore-txt em{color:var(--cream);font-style:italic;}
+.enigma-zone{display:none;}
+.enigma-zone.visible{display:block;}
+.enigma-box{background:rgba(212,168,67,.04);border:1px solid rgba(212,168,67,.2);border-radius:3px;padding:18px;margin-bottom:14px;}
+.enigma-q{font-family:'IM Fell English',serif;font-size:1rem;color:var(--cream);line-height:1.7;margin-bottom:14px;}
+.enigma-input{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--border2);border-radius:3px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--gold);letter-spacing:.05em;outline:none;transition:border-color .2s;}
+.enigma-input:focus{border-color:rgba(212,168,67,.5);}
+.enigma-input::placeholder{color:var(--dim);}
+.enigma-feedback{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;margin-top:8px;min-height:18px;}
+.enigma-feedback.err{color:#ff5f56;}
+.enigma-feedback.ok{color:var(--green);}
+.puzzle-zone{display:none;}
+.puzzle-zone.visible{display:block;}
+.puzzle-intro{font-size:.85rem;color:var(--text);line-height:1.7;margin-bottom:14px;}
+.puzzle-intro em{color:var(--cream);font-style:italic;}
+.pixel-grid-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:14px;}
+.pixel-grid{display:grid;gap:3px;background:rgba(0,0,0,.4);border:1px solid var(--border2);border-radius:3px;padding:12px;cursor:pointer;}
+.px-cell{width:28px;height:28px;border-radius:2px;border:1px solid rgba(255,255,255,.05);transition:all .15s;cursor:pointer;}
+.px-cell:hover{transform:scale(1.1);border-color:rgba(212,168,67,.4);}
+.px-cell.correct{border-color:var(--green);box-shadow:0 0 8px rgba(34,197,94,.4);}
+.px-cell.wrong{border-color:#ff5f56;animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.puzzle-progress{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--dim);letter-spacing:.15em;}
+.puzzle-progress span{color:var(--violet);}
+.puzzle-hint{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--fog);margin-top:6px;font-style:italic;}
+.lsb-zone{display:none;}
+.lsb-zone.visible{display:block;}
+.freq-unlock{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.2);border-radius:3px;padding:16px 18px;margin-bottom:14px;}
+.freq-unlock-head{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--green);text-transform:uppercase;margin-bottom:8px;}
+.freq-unlock-msg{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:12px;}
+.freq-unlock-msg em{color:var(--cream);}
+.freq-amp-display{display:flex;align-items:center;gap:14px;background:rgba(0,0,0,.4);border:1px solid rgba(124,58,237,.3);border-radius:3px;padding:12px 16px;margin-bottom:14px;}
+.freq-amp-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;flex:1;}
+.freq-amp-value{font-family:'Cinzel',serif;font-size:2.2rem;font-weight:900;color:var(--violet);line-height:1;animation:ampPulse 2s ease-in-out infinite;}
+@keyframes ampPulse{0%,100%{text-shadow:0 0 0 rgba(168,85,247,0)}50%{text-shadow:0 0 20px rgba(168,85,247,.5)}}
+.freq-amp-unit{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--dim);}
+.signal-meter{background:rgba(0,0,0,.35);border:1px solid var(--border2);border-radius:3px;padding:12px 14px;margin-bottom:14px;}
+.signal-meter-head{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between;}
+.signal-bar-track{height:8px;background:rgba(0,0,0,.5);border-radius:4px;overflow:hidden;margin-bottom:7px;}
+.signal-bar-fill{height:100%;width:0%;border-radius:4px;transition:width .2s,background .2s;}
+.signal-dots{display:flex;gap:5px;margin-bottom:6px;}
+.signal-dot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:background .2s,box-shadow .2s;}
+.signal-dot.active{background:var(--violet);box-shadow:0 0 6px rgba(168,85,247,.6);}
+.signal-status{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--dim);letter-spacing:.1em;transition:color .2s;}
+.btn-scroll-slider{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 14px;border-radius:3px;cursor:pointer;transition:all .2s;border:1px solid rgba(124,58,237,.4);background:rgba(124,58,237,.08);color:var(--violet);margin-top:4px;}
+.btn-scroll-slider:hover{background:rgba(124,58,237,.18);border-color:var(--violet);}
+.btn-scroll-slider .arrow{animation:bounceDown 1.5s ease-in-out infinite;}
+@keyframes bounceDown{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.solved-banner{display:none;margin-top:12px;padding:12px 16px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--green);text-align:center;}
+.solved-banner.visible{display:block;}
+.slider-section{max-width:1200px;margin:56px auto 0;padding:0 40px;}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.4em;color:var(--dim);text-transform:uppercase;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.section-eyebrow .eyebrow-spectre{color:var(--violet);transition:color .5s;}
+.slider-card{border:1px solid var(--border2);background:var(--panel);border-radius:4px;overflow:hidden;position:relative;transition:border-color .5s,box-shadow .5s;}
+.slider-card.hunting{border-color:rgba(124,58,237,.4);box-shadow:0 0 30px rgba(124,58,237,.08);}
+.slider-card.signal-hot{border-color:rgba(212,168,67,.5)!important;box-shadow:0 0 30px rgba(212,168,67,.15)!important;}
+.slider-card.signal-exact{border-color:rgba(34,197,94,.6)!important;box-shadow:0 0 50px rgba(34,197,94,.2)!important;animation:exactPulse 1s ease-in-out 3;}
+@keyframes exactPulse{0%,100%{box-shadow:0 0 50px rgba(34,197,94,.2)}50%{box-shadow:0 0 80px rgba(34,197,94,.4)}}
+.slider-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--slider-accent-1),var(--slider-accent-2));transition:background .6s ease;}
+.slider-head{padding:18px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;}
+.slider-icon{font-size:1.4rem;}
+.slider-title{font-family:'Cinzel',serif;font-size:1rem;color:var(--white);}
+.slider-spectre-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:3px 10px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);transition:all .5s;margin-left:8px;}
+.slider-sub{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--dim);margin-top:3px;}
+.slider-context-bar{padding:10px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.2);transition:all .5s;}
+.slider-context-num{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:900;color:var(--border2);line-height:1;transition:color .5s;}
+.slider-context-info{flex:1;}
+.slider-context-title{font-family:'Cinzel',serif;font-size:.9rem;color:var(--white);transition:color .5s;}
+.slider-context-sub{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--dim);margin-top:2px;letter-spacing:.1em;}
+.slider-context-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.15em;padding:3px 9px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);transition:all .5s;}
+.slider-hunt-bar{display:none;padding:10px 26px;border-bottom:1px solid var(--border);background:rgba(124,58,237,.05);}
+.slider-hunt-bar.visible{display:flex;align-items:center;gap:12px;}
+.hunt-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;white-space:nowrap;}
+.hunt-target{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--violet);}
+.hunt-current{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text);min-width:40px;}
+.hunt-proximity-track{flex:1;height:6px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden;}
+.hunt-proximity-fill{height:100%;width:0%;border-radius:3px;transition:width .15s,background .15s;}
+.hunt-status-txt{font-family:'JetBrains Mono',monospace;font-size:.62rem;min-width:80px;text-align:right;transition:color .2s;}
+.slider-body{padding:26px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+@media(max-width:700px){.slider-body{grid-template-columns:1fr;}}
+.slider-desc{font-size:.88rem;line-height:1.78;color:var(--text);margin-bottom:20px;}
+.slider-desc em{color:var(--cream);font-style:italic;}
+.slider-desc strong{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--violet);font-weight:400;transition:color .5s;}
+.lsb-control{margin-bottom:18px;}
+.lsb-control-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;display:flex;justify-content:space-between;margin-bottom:10px;}
+.lsb-control-label span{color:var(--violet);}
+input[type=range].lsb-slider{width:100%;height:4px;appearance:none;background:var(--border);border-radius:2px;outline:none;cursor:pointer;}
+input[type=range].lsb-slider::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--violet);border:2px solid var(--white);box-shadow:0 0 10px rgba(168,85,247,.5);cursor:pointer;transition:all .15s;}
+input[type=range].lsb-slider::-webkit-slider-thumb:hover{transform:scale(1.2);}
+.lsb-canvas-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.lsb-canvas-box{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.lsb-canvas-box canvas{border:1px solid var(--border2);border-radius:2px;width:100%;transition:border-color .3s,box-shadow .3s;}
+.lsb-canvas-box canvas.exact-glow{border-color:rgba(34,197,94,.6)!important;box-shadow:0 0 20px rgba(34,197,94,.3)!important;}
+.lsb-canvas-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;}
+.lsb-info-box{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:3px;padding:14px;margin-top:14px;transition:border-color .5s;}
+.lsb-info-box .pixel-info{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text);line-height:2;}
+.lsb-info-box .pixel-info span{color:var(--violet);}
+.lsb-info-box .pixel-info .lsb-bit{color:var(--gold);font-size:.9rem;}
+.dwell-zone{display:none;margin-top:10px;padding:12px 14px;background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.2);border-radius:3px;}
+.dwell-zone.visible{display:block;}
+.dwell-head{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.2em;color:#22c55e;text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.dwell-countdown{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:700;color:#22c55e;animation:countPulse .5s ease-in-out infinite alternate;}
+@keyframes countPulse{from{opacity:.7}to{opacity:1}}
+.dwell-track{height:5px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden;}
+.dwell-fill{height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#86efac);border-radius:3px;transition:width .1s linear;}
+.dwell-sublabel{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:rgba(34,197,94,.5);margin-top:6px;letter-spacing:.1em;}
+.final-dwell-zone{display:none;margin-top:8px;padding:10px 12px;background:rgba(212,168,67,.04);border:1px solid rgba(212,168,67,.2);border-radius:3px;}
+.final-dwell-zone.visible{display:block;}
+.final-dwell-head{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between;}
+.final-dwell-countdown{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--gold);}
+.final-dwell-track{height:4px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden;}
+.final-dwell-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),#fde68a);border-radius:3px;transition:width .1s linear;}
+.fragment-reveal{display:none;margin-top:20px;padding:18px 20px;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.3);border-radius:3px;animation:fadeReveal .6s ease;}
+.fragment-reveal.visible{display:block;}
+@keyframes fadeReveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fragment-reveal-head{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.35em;color:rgba(34,197,94,.5);text-transform:uppercase;margin-bottom:8px;}
+.fragment-reveal-flag{font-family:'JetBrains Mono',monospace;font-size:clamp(.75rem,1.8vw,.95rem);color:var(--green);word-break:break-all;line-height:1.6;letter-spacing:.04em;}
+.fragment-reveal-next{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--dim);margin-top:10px;text-transform:uppercase;}
+.final-section{max-width:1200px;margin:56px auto 0;padding:0 40px;display:none;}
+.final-section.visible{display:block;animation:fadeUp .8s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.final-card{border:1px solid rgba(212,168,67,.4);background:rgba(212,168,67,.04);border-radius:4px;overflow:hidden;position:relative;}
+.final-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--pink),var(--violet),var(--gold));background-size:300% 100%;animation:shimmer 3s linear infinite;}
+@keyframes shimmer{0%{background-position:300%}100%{background-position:-300%}}
+.final-top{padding:28px 32px;border-bottom:1px solid rgba(212,168,67,.12);text-align:center;}
+.final-crown{font-size:2.5rem;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.final-title{font-family:'Cinzel',serif;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:.1em;}
+.final-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:.92rem;color:rgba(212,168,67,.55);margin-top:8px;}
+.final-body{padding:28px;display:grid;grid-template-columns:1fr 1.1fr;gap:28px;}
+@media(max-width:800px){.final-body{grid-template-columns:1fr;}}
+.final-art-frame{position:relative;padding:12px;background:var(--panel2);border:1px solid rgba(212,168,67,.25);box-shadow:0 0 40px rgba(212,168,67,.1),inset 0 0 20px rgba(0,0,0,.4);}
+.final-art-frame::before,.final-art-frame::after{content:'';position:absolute;width:14px;height:14px;border-color:var(--gold);border-style:solid;}
+.final-art-frame::before{top:5px;left:5px;border-width:1px 0 0 1px;}
+.final-art-frame::after{bottom:5px;right:5px;border-width:0 1px 1px 0;}
+.final-caption{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.2em;color:rgba(212,168,67,.4);text-align:center;margin-top:9px;text-transform:uppercase;}
+.final-lore{font-size:.9rem;line-height:1.88;color:var(--text);margin-bottom:20px;}
+.final-lore em{color:var(--cream);font-style:italic;}
+.final-slider-section{background:rgba(0,0,0,.3);border:1px solid rgba(212,168,67,.15);border-radius:3px;padding:18px;margin-bottom:12px;}
+.final-slider-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.25em;color:rgba(212,168,67,.5);text-transform:uppercase;margin-bottom:12px;}
+.final-slider-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.final-slider-val{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:700;color:var(--gold);min-width:42px;text-align:right;}
+input[type=range].final-lsb-slider{flex:1;height:4px;appearance:none;background:rgba(212,168,67,.15);border-radius:2px;outline:none;cursor:pointer;}
+input[type=range].final-lsb-slider::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid var(--white);box-shadow:0 0 10px rgba(212,168,67,.5);cursor:pointer;transition:all .15s;}
+.final-hunt-info{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--dim);margin-bottom:10px;}
+.final-hunt-bar-track{height:6px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.final-hunt-bar-fill{height:100%;width:0%;border-radius:3px;transition:width .15s,background .15s;}
+.final-signal-dots{display:flex;gap:5px;margin-bottom:8px;}
+.final-sdot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:background .2s,box-shadow .2s;}
+.final-sdot.active{background:var(--gold);box-shadow:0 0 6px rgba(212,168,67,.6);}
+.final-canvas-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.final-cv-box{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.final-cv-box canvas{border:1px solid rgba(212,168,67,.2);border-radius:2px;width:100%;transition:border-color .3s,box-shadow .3s;}
+.final-cv-box canvas.final-exact{border-color:rgba(212,168,67,.7)!important;box-shadow:0 0 20px rgba(212,168,67,.3)!important;}
+.final-cv-label{font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.15em;color:rgba(212,168,67,.35);text-transform:uppercase;}
+.final-flag-reveal{display:none;margin-top:16px;padding:18px 20px;background:rgba(212,168,67,.06);border:1px solid rgba(212,168,67,.25);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:clamp(.8rem,2vw,1rem);color:var(--gold);word-break:break-all;line-height:1.6;letter-spacing:.04em;animation:glow 3s ease-in-out infinite alternate;}
+.final-flag-reveal.visible{display:block;}
+@keyframes glow{from{box-shadow:0 0 0 rgba(212,168,67,0)}to{box-shadow:0 0 30px rgba(212,168,67,.15)}}
+.flag-sublabel{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.35em;color:rgba(212,168,67,.35);text-transform:uppercase;margin-bottom:10px;}
+footer{max-width:1200px;margin:64px auto 0;padding:32px 40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-left{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;background:linear-gradient(90deg,var(--violet),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.footer-right{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--dim);line-height:1.8;}
+.footer-right span{color:var(--violet);}
+@media(max-width:768px){header,.progress-section,.serie-section,.ch-panel,.slider-section,.final-section,footer{padding-left:20px;padding-right:20px;}.hero-rule{padding:0 20px;}}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+<div class="grain"></div>
+<div id="loader">
+  <div class="loader-eye">◈</div>
+  <div class="loader-txt">Initialisation · Série Spectre</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+<div id="site">
+<header>
+  <div>
+    <div class="gallery-name">Galerie Virtuelle Anonyme — Série Spectre</div>
+    <div class="artist-name" data-text="0 × 7">0 × 7</div>
+    <div class="artist-sub">7 œuvres · 7 énigmes · 1 seul chemin</div>
+  </div>
+  <div class="header-right">
+    <div>Série <span>SPECTRE</span></div>
+    <div>2023–2024</div>
+    <div>Accès <span>séquentiel</span></div>
+    <div>Protocole <span>Zéro</span></div>
+  </div>
+</header>
+<div class="hero-rule"><div class="rule-line"></div><div class="rule-ornament">✦ Résoudre · Extraire · Avancer ✦</div><div class="rule-line"></div></div>
+<div class="progress-section">
+  <div class="progress-header">
+    <div class="progress-label">Progression — Série Spectre</div>
+    <div class="progress-count"><span id="solvedCount">0</span> / 7</div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+<div class="serie-section"><div class="serie-grid" id="serieGrid"></div></div>
+
+<div class="ch-panel" id="chPanel">
+  <div class="ch-card" id="chCard">
+    <div class="ch-head">
+      <div class="ch-num" id="chNum">01</div>
+      <div class="ch-info">
+        <div class="ch-title" id="chTitle">—</div>
+        <div class="ch-sub" id="chSub">—</div>
+      </div>
+      <div class="ch-badge" id="chBadge">ÉNIGME</div>
+    </div>
+    <div class="ch-body">
+      <div class="ch-left">
+        <div class="art-frame" id="artFrame">
+          <canvas class="art-canvas" id="chCanvas" width="380" height="260"></canvas>
+        </div>
+        <div class="art-caption" id="chCaption">—</div>
+        <div class="hint-blk"><div class="hint-lbl">✦ Transmission de 0x7</div><div class="hint-txt" id="chHint">—</div></div>
+      </div>
+      <div class="ch-right">
+        <div class="lore-blk"><div class="lore-lbl">Fragment de manifeste</div><div class="lore-txt" id="chLore">—</div></div>
+        <div class="enigma-zone" id="textEnigma">
+          <div class="enigma-box">
+            <div class="enigma-q" id="enigmaQ">—</div>
+            <input class="enigma-input" id="enigmaInput" type="text" placeholder="Votre réponse…" autocomplete="off" spellcheck="false">
+            <div class="enigma-feedback" id="enigmaFeedback"></div>
+          </div>
+          <button class="btn btn-gold" onclick="checkTextEnigma()">✦ Valider la réponse</button>
+        </div>
+        <div class="puzzle-zone" id="pixelPuzzle">
+          <div class="puzzle-intro" id="puzzleIntro">—</div>
+          <div class="pixel-grid-wrap">
+            <div class="pixel-grid" id="pixelGrid"></div>
+            <div class="puzzle-progress">Pixels corrects : <span id="puzzleProgress">0</span> / <span id="puzzleTotal">0</span></div>
+            <div class="puzzle-hint" id="puzzleHint">—</div>
+          </div>
+        </div>
+        <div class="lsb-zone" id="lsbZone">
+          <div class="freq-unlock">
+            <div class="freq-unlock-head">✓ Énigme résolue — Fréquence débloquée</div>
+            <div class="freq-unlock-msg">La fréquence exacte est cachée dans l'image. <em>Rendez-vous dans l'Atelier LSB ci-dessous et explorez — le signal vous guidera.</em></div>
+            <div class="signal-meter">
+              <div class="signal-meter-head"><span>Force du signal</span><span id="signalPct">0%</span></div>
+              <div class="signal-bar-track"><div class="signal-bar-fill" id="signalBarFill"></div></div>
+              <div class="signal-dots" id="signalDots">
+                <div class="signal-dot"></div><div class="signal-dot"></div><div class="signal-dot"></div>
+                <div class="signal-dot"></div><div class="signal-dot"></div>
+              </div>
+              <div class="signal-status" id="signalStatus">— En attente —</div>
+            </div>
+            <button class="btn-scroll-slider" onclick="scrollToSlider()">↓ <span class="arrow">▼</span> Aller à l'Atelier LSB</button>
+          </div>
+          <div class="solved-banner" id="solvedBanner">✓ &nbsp; Fragment récupéré — Spectre suivant déverrouillé</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slider-section" id="sliderSection">
+  <div class="section-eyebrow">Atelier LSB — Visualiser la stéganographie · Spectre actif : <span class="eyebrow-spectre" id="sliderEyebrowNum">—</span></div>
+  <div class="slider-card" id="sliderCard">
+    <div class="slider-head">
+      <div class="slider-icon">⚙</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="slider-title">Modifier les bits LSB en temps réel</div>
+          <div class="slider-spectre-tag" id="sliderTag">—</div>
+        </div>
+        <div class="slider-sub">Image analysée : <span id="sliderSpectreName" style="color:var(--violet);transition:color .5s">—</span></div>
+      </div>
+    </div>
+    <div class="slider-context-bar" id="sliderContextBar">
+      <div class="slider-context-num" id="sliderCtxNum">—</div>
+      <div class="slider-context-info">
+        <div class="slider-context-title" id="sliderCtxTitle">—</div>
+        <div class="slider-context-sub" id="sliderCtxSub">—</div>
+      </div>
+      <div class="slider-context-badge" id="sliderCtxBadge">EN COURS</div>
+    </div>
+    <div class="slider-hunt-bar" id="sliderHuntBar">
+      <div class="hunt-label">Signal</div>
+      <div class="hunt-proximity-track"><div class="hunt-proximity-fill" id="huntProxFill"></div></div>
+      <div class="hunt-current" id="huntCurrent">0</div>
+      <div class="hunt-status-txt" id="huntStatusTxt">—</div>
+    </div>
+    <div class="slider-body">
+      <div>
+        <div class="slider-desc">
+          Chaque pixel contient une valeur <em>Rouge, Vert, Bleu</em> entre 0 et 255. La stéganographie LSB modifie uniquement le <strong id="sliderStrongAccent">bit le moins significatif</strong> — le bit 0.<br><br>
+          Utilisez le slider pour amplifier cet effet et <em>rendre visible l'invisible</em>. À 0, l'image est normale. À 255, seuls les bits LSB sont affichés.
+        </div>
+        <div class="lsb-control">
+          <div class="lsb-control-label">Amplification LSB <span id="sliderVal">0</span></div>
+          <input type="range" class="lsb-slider" id="lsbSlider" min="0" max="255" value="0" oninput="updateSlider(this.value)">
+        </div>
+        <div class="lsb-info-box" id="sliderInfoBox">
+          <div class="pixel-info">
+            Spectre <span id="sliderInfoNum">—</span> — Pixel central · Canal Rouge<br>
+            Valeur originale : <span id="pixOrigVal">—</span><br>
+            Binaire : <span id="pixOrigBin">—</span><br>
+            Bit LSB : <span class="lsb-bit" id="pixLSB">—</span><br>
+            Valeur amplifiée : <span id="pixAmpVal">—</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="lsb-canvas-wrap">
+          <div class="lsb-canvas-box">
+            <canvas id="sliderOriginal" width="180" height="180"></canvas>
+            <div class="lsb-canvas-label" id="sliderOrigLabel">Spectre — · Original</div>
+          </div>
+          <div class="lsb-canvas-box">
+            <canvas id="sliderModified" width="180" height="180"></canvas>
+            <div class="lsb-canvas-label">LSB amplifié</div>
+          </div>
+        </div>
+        <div class="dwell-zone" id="dwellZone">
+          <div class="dwell-head"><span>◈ Maintien du signal</span><span class="dwell-countdown" id="dwellCountdown">3.0s</span></div>
+          <div class="dwell-track"><div class="dwell-fill" id="dwellFill"></div></div>
+          <div class="dwell-sublabel">Ne bougez pas le curseur…</div>
+        </div>
+        <div class="fragment-reveal" id="fragmentReveal">
+          <div class="fragment-reveal-head">◈ Fragment extrait — Signal confirmé</div>
+          <div class="fragment-reveal-flag" id="fragmentFlagVal">—</div>
+          <div class="fragment-reveal-next" id="fragmentNextMsg">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="final-section" id="finalSection">
+  <div class="section-eyebrow">Protocole Zéro — Dernier verrou</div>
+  <div class="final-card">
+    <div class="final-top">
+      <div class="final-crown">◈</div>
+      <div class="final-title">Spectre Final</div>
+      <div class="final-sub">Les 7 fragments réunis cachent une dernière vérité</div>
+    </div>
+    <div class="final-body">
+      <div>
+        <div class="final-art-frame">
+          <canvas id="finalCanvas" width="420" height="280" style="display:block;width:100%;"></canvas>
+        </div>
+        <div class="final-caption">Spectre Final · 0x7 · Protocole Zéro · 2024</div>
+        <button class="btn btn-gold" style="margin-top:14px" onclick="downloadFinal()">⬇ Télécharger le PNG</button>
+      </div>
+      <div>
+        <div class="final-lore">
+          <em>"Vous avez traversé les sept fragments. Ce que vous cherchez est là, devant vous. Mais le voir ne suffit pas."</em>
+          <br><br>
+          La fréquence finale n'est pas donnée. <em>Elle se trouve quelque part entre 0 et 255.</em><br>
+          Explorez. Observez la transformation. Le signal exact révèle tout.
+        </div>
+        <div class="final-slider-section">
+          <div class="final-slider-label">◈ Fréquence d'exploration — Spectre Final</div>
+          <div class="final-canvas-pair">
+            <div class="final-cv-box">
+              <canvas id="finalSliderOrig" width="140" height="90"></canvas>
+              <div class="final-cv-label">Original</div>
+            </div>
+            <div class="final-cv-box">
+              <canvas id="finalSliderMod" width="140" height="90"></canvas>
+              <div class="final-cv-label">LSB amplifié</div>
+            </div>
+          </div>
+          <div class="final-slider-row">
+            <div class="final-slider-val" id="finalSliderVal">0</div>
+            <input type="range" class="final-lsb-slider" id="finalLsbSlider" min="0" max="255" value="0" oninput="updateFinalSlider(this.value)">
+          </div>
+          <div class="final-hunt-info" id="finalHuntInfo">— Déplacez le curseur pour sonder les fréquences —</div>
+          <div class="final-hunt-bar-track"><div class="final-hunt-bar-fill" id="finalHuntFill"></div></div>
+          <div class="final-signal-dots" id="finalSignalDots">
+            <div class="final-sdot"></div><div class="final-sdot"></div><div class="final-sdot"></div>
+            <div class="final-sdot"></div><div class="final-sdot"></div><div class="final-sdot"></div><div class="final-sdot"></div>
+          </div>
+          <div class="final-dwell-zone" id="finalDwellZone">
+            <div class="final-dwell-head"><span>◈ Maintien du signal final</span><span class="final-dwell-countdown" id="finalDwellCountdown">3.0s</span></div>
+            <div class="final-dwell-track"><div class="final-dwell-fill" id="finalDwellFill"></div></div>
+          </div>
+        </div>
+        <div class="final-flag-reveal" id="finalFlagReveal">
+          <div class="flag-sublabel">Message final — Protocole Zéro</div>
+          <div id="finalFlagVal2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">GALERIE 0×7</div>
+  <div class="footer-right">Série <span>Spectre</span> · 2023–2024<br><span>Protocole Zéro</span> · Accès séquentiel</div>
+</footer>
+</div>
+
+<script>
+// ═══ DATA ═══
+const S=[
+  {num:1,title:"L'Éveil",sub:"Premier fragment — texte",caption:"Spectre #1 · 0x7 · Mars 2023",hint:"« Le premier bit est toujours le plus facile à ignorer. »",lore:"0x7 a commencé la série Spectre en mars 2023. Ce tableau marque le début d'un projet qu'il nommera <em>Protocole Zéro</em>. Il aurait caché quelque chose dans chaque œuvre depuis le premier jour.",enigmaType:'text',question:"Quelle est la valeur maximale d'un octet en base 10 ?",answer:["255"],secretAmp:128,flag:['SP','1{','4w','3i','l_','b1','t_','z3','r0','}'],pal:{bg:['#030010','#080020'],glows:[{x:.15,y:.3,r:.38,c:'rgba(99,102,241,0.4)'},{x:.75,y:.65,r:.32,c:'rgba(124,58,237,0.3)'}],stars:true}},
+  {num:2,title:"La Propagation",sub:"Deuxième fragment — puzzle",caption:"Spectre #2 · 0x7 · Juin 2023",hint:"« Un signal qui se propage ne peut pas être arrêté. Seulement altéré. »",lore:"0x7 publie #2 et #3 le même jour. Sur le forum : <em>« Tout est lié. Rien n'est visible. »</em>",enigmaType:'pixel',puzzleIntro:"Le canal Rouge d'une image 4×4 contient les valeurs ci-dessous. <em>Cliquez sur les pixels dont le bit LSB vaut 1</em> — ceux qui cachent un bit de donnée.",pixelValues:[124,201,88,45,200,77,130,255,64,183,92,210,17,100,251,66],secretAmp:77,flag:['SP','2{','s1','gn','4l','_p','r0','p4','g3','}'],pal:{bg:['#001008','#002018'],glows:[{x:.2,y:.2,r:.4,c:'rgba(16,185,129,0.35)'},{x:.7,y:.7,r:.35,c:'rgba(5,150,105,0.25)'}],stars:false}},
+  {num:3,title:"La Fracture",sub:"Troisième fragment — texte",caption:"Spectre #3 · 0x7 · Été 2023",hint:"« La fracture n'est pas une fin. C'est là où la lumière entre. »",lore:"0x7 disparaît trois mois après #3. Le tableau reste en ligne — <em>intact</em>.",enigmaType:'text',question:"En stéganographie LSB, dans quel canal encode-t-on classiquement les données ? (R, G ou B)",answer:["r","rouge","red"],secretAmp:64,flag:['SP','3{','fr','4c','_d','3_','lu','m1','3r','3}'],pal:{bg:['#0a0008','#180010'],glows:[{x:.5,y:.4,r:.5,c:'rgba(236,72,153,0.3)'},{x:.2,y:.7,r:.3,c:'rgba(190,24,93,0.25)'}],stars:false}},
+  {num:4,title:"Le Silence",sub:"Quatrième fragment — puzzle",caption:"Spectre #4 · 0x7 · Automne 2023",hint:"« Le silence dit plus que le bruit. Écoutez les pixels. »",lore:"Spectre #4 apparaît en septembre 2023, sans annonce. Aucun message de 0x7. Les métadonnées ont été effacées. <em>Seule l'image parle.</em>",enigmaType:'pixel',puzzleIntro:"Un message est encodé dans une ligne de 8 pixels. La séquence de bits LSB donne un caractère ASCII. <em>Cliquez dans l'ordre les pixels dont le LSB forme la lettre 'A' (65 en décimal = 01000001 en binaire).</em>",pixelValues:[100,201,88,45,200,77,130,255],secretAmp:65,flag:['SP','4{','s1','l3','nc','3_','3n','c0','d3','}'],pal:{bg:['#080a00','#101400'],glows:[{x:.4,y:.5,r:.45,c:'rgba(234,179,8,0.28)'},{x:.75,y:.25,r:.3,c:'rgba(161,98,7,0.2)'}],stars:true}},
+  {num:5,title:"La Résurgence",sub:"Cinquième fragment — texte",caption:"Spectre #5 · 0x7 · Hiver 2023",hint:"« Je suis revenu. Cherchez ce que j'ai laissé. »",lore:"Novembre 2023. 0x7 poste : <em>« Je suis encore là. »</em> Spectre #5 suit 48h après. Plus dense. Comme si quelque chose avait changé.",enigmaType:'text',question:"Si une image PNG est convertie en JPEG puis re-sauvegardée, que se passe-t-il aux données cachées par LSB ?",answer:["détruites","perdues","corrompues","detruites","ecrasees","écrasées","disparaissent","supprimees","supprimées,détruite","perdue","corrompue","detruite","ecrasee","écrasée","disparaissent","supprimee","supprimée,détruit","perdu","corrompu","detruit","ecrase","écrasé","disparaissent","supprime","supprimé"],secretAmp:200,flag:['SP','5{','r3','su','rg','3n','c3','_0','x7','}'],pal:{bg:['#0a0010','#150020'],glows:[{x:.3,y:.3,r:.4,c:'rgba(168,85,247,0.35)'},{x:.6,y:.6,r:.3,c:'rgba(139,92,246,0.3)'},{x:.85,y:.15,r:.25,c:'rgba(109,40,217,0.25)'}],stars:true}},
+  {num:6,title:"L'Avertissement",sub:"Sixième fragment — puzzle",caption:"Spectre #6 · 0x7 · Janvier 2024",hint:"« Si vous lisez ceci, vous êtes presque au bout. Continuez. »",lore:"14 janvier 2024. Le forum disparaît. Dernier message de 0x7 : <em>« #6 est prêt. #7 sera le dernier. »</em>",enigmaType:'pixel',puzzleIntro:"Ces 16 pixels forment une image 4×4. <em>Cliquez uniquement les pixels dont la valeur est impaire</em> — leur bit LSB vaut 1.",pixelValues:[33,200,77,88,145,66,255,14,91,180,43,100,201,55,128,37],secretAmp:33,flag:['SP','6{','l4','st','_w','4r','n1','ng','_0','x7','}'],pal:{bg:['#080000','#150000'],glows:[{x:.5,y:.5,r:.5,c:'rgba(239,68,68,0.3)'},{x:.2,y:.3,r:.3,c:'rgba(220,38,38,0.2)'}],stars:false}},
+  {num:7,title:"Protocole Zéro",sub:"Septième fragment — texte final",caption:"Spectre #7 · 0x7 · Février 2024 · Seule copie intacte",hint:"« L'art cache toujours ce que l'artiste refuse de montrer. Regardez avec les yeux des bits. »",lore:"14 février 2024, 03h17. Dernière transmission de 0x7. <em>Il n'a plus jamais été entendu.</em> Ce tableau est la seule œuvre encore intacte.",enigmaType:'text',question:"Combien de bits sont modifiés par pixel dans la stéganographie LSB classique (1 canal) ?",answer:["1","un"],secretAmp:1,flag:['SP','7{','pr','0t','0c','0l','3_','z3','r0','_f','1n','4l','}'],pal:{bg:['#030008','#06000e'],glows:[{x:.22,y:.37,r:.48,c:'rgba(124,58,237,0.35)'},{x:.77,y:.53,r:.42,c:'rgba(168,85,247,0.28)'},{x:.5,y:.79,r:.38,c:'rgba(236,72,153,0.22)'},{x:.82,y:.21,r:.32,c:'rgba(212,168,67,0.18)'},{x:.14,y:.82,r:.28,c:'rgba(99,102,241,0.25)'}],stars:true}}
+];
+
+// Flatten flags
+S.forEach(s=>{s._flag=s.flag.join('');delete s.flag;});
+
+const SPECTRE_ACCENTS=[['#6366f1','#7c3aed'],['#10b981','#059669'],['#ec4899','#be185d'],['#eab308','#a16207'],['#a855f7','#7c3aed'],['#ef4444','#dc2626'],['#7c3aed','#ec4899']];
+const FINAL_FLAG='CRYPTUM{PR0T0C0L3_Z3R0_0x7_C0MPL3T}';
+const FINAL_SECRET_AMP=42;
+
+let solved=[],currentIdx=null,phase={};
+const canvases=[];
+let puzzleState={correct:new Set(),total:0,answers:new Set(),cells:[],resetting:false};
+let sliderOrigData=null,finalOrigData=null;
+let fragmentAlreadyRevealed=[];
+
+// Dwell timers
+const DWELL_DURATION=3000;
+let dwellTimer=null,dwellStart=null,dwellRAF=null;
+let finalDwellTimer=null,finalDwellStart=null,finalDwellRAF=null;
+
+// ═══ LOADER ═══
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('hidden');
+    document.getElementById('site').classList.add('visible');
+    buildGrid();
+    generateAllCanvases();
+    generateFinalCanvas();
+    setTimeout(()=>{updateSliderForSpectre(0);initFinalSlider();},200);
+    openSpectre(0);
+  },2700);
+});
+
+// ═══ LSB ENGINE ═══
+function encodeLSB(id,msg){
+  const d=id.data;
+  let bits='';
+  for(let i=0;i<msg.length;i++) bits+=msg.charCodeAt(i).toString(2).padStart(8,'0');
+  bits+='0'.repeat(32);
+  for(let i=0;i<bits.length;i++){
+    const x=i*4;
+    if(x>=d.length) break;
+    d[x]=(d[x]&0xFE)|parseInt(bits[i]);
+  }
+  return id;
+}
+
+function rng(seed){let s=seed;return()=>{s=(s*9301+49297)%233280;return s/233280;};}
+
+// ═══ CANVAS GENERATION ═══
+function genCanvas(spec,cv){
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,p=spec.pal;
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,p.bg[0]);bg.addColorStop(1,p.bg[1]);
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  p.glows.forEach(g=>{
+    const gr=ctx.createRadialGradient(g.x*W,g.y*H,0,g.x*W,g.y*H,g.r*Math.max(W,H));
+    gr.addColorStop(0,g.c);gr.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+  });
+  if(p.stars){
+    const r=rng(spec.num*17+3);
+    for(let i=0;i<180;i++){
+      const sx=r()*W,sy=r()*H,b=r();
+      ctx.beginPath();ctx.arc(sx,sy,b>.9?1.2:b>.75?.7:.3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${b*.65+.1})`;ctx.fill();
+    }
+  }
+  const r2=rng(spec.num*31);ctx.save();
+  for(let i=0;i<3;i++){
+    ctx.beginPath();ctx.moveTo(r2()*W,r2()*H);ctx.lineTo(r2()*W,r2()*H);
+    ctx.strokeStyle=p.glows[i%p.glows.length].c.replace(/[\d.]+\)$/,'0.12)');
+    ctx.lineWidth=.7;ctx.stroke();
+  }
+  ctx.restore();
+  const r3=rng(spec.num*53);
+  for(let i=0;i<5;i++){
+    const px=r3()*W*.85+W*.07,py=r3()*H*.85+H*.07,pr=r3()*2.5+1;
+    const col=p.glows[i%p.glows.length].c;
+    const pg=ctx.createRadialGradient(px,py,0,px,py,pr*5);
+    pg.addColorStop(0,col);pg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=pg;ctx.fillRect(px-pr*5,py-pr*5,pr*10,pr*10);
+    ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,0.8)';ctx.fill();
+  }
+  ctx.font='10px monospace';ctx.fillStyle='rgba(255,255,255,0.025)';
+  ctx.fillText(`0x7 #${spec.num}`,W-50,H-11);
+  const id2=ctx.getImageData(0,0,W,H);
+  ctx.putImageData(encodeLSB(id2,spec._flag),0,0);
+}
+
+function generateAllCanvases(){
+  S.forEach((s,i)=>{
+    const c=document.createElement('canvas');c.width=380;c.height=260;
+    genCanvas(s,c);canvases.push(c);
+    const t=document.getElementById(`tc-${i}`);
+    if(t) t.getContext('2d').drawImage(c,0,0,t.width,t.height);
+  });
+}
+
+function generateFinalCanvas(){
+  const cv=document.getElementById('finalCanvas');
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#040010');bg.addColorStop(.5,'#08001a');bg.addColorStop(1,'#020008');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  const glows=[
+    {x:.2,y:.3,r:200,c:'rgba(99,102,241,0.2)'},{x:.7,y:.6,r:180,c:'rgba(236,72,153,0.18)'},
+    {x:.5,y:.2,r:160,c:'rgba(212,168,67,0.16)'},{x:.15,y:.7,r:140,c:'rgba(16,185,129,0.15)'},
+    {x:.85,y:.4,r:150,c:'rgba(168,85,247,0.2)'},{x:.45,y:.8,r:120,c:'rgba(239,68,68,0.15)'},
+    {x:.6,y:.15,r:130,c:'rgba(124,58,237,0.25)'}
+  ];
+  glows.forEach(g=>{
+    const gr=ctx.createRadialGradient(g.x*W,g.y*H,0,g.x*W,g.y*H,g.r);
+    gr.addColorStop(0,g.c);gr.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+  });
+  const r=rng(777);
+  for(let i=0;i<350;i++){
+    const sx=r()*W,sy=r()*H,b=r();
+    ctx.beginPath();ctx.arc(sx,sy,b>.92?1.5:b>.78?1:.4,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${b*.7+.1})`;ctx.fill();
+  }
+  const colors=['rgba(99,102,241,0.9)','rgba(16,185,129,0.9)','rgba(236,72,153,0.9)','rgba(234,179,8,0.9)','rgba(168,85,247,0.9)','rgba(239,68,68,0.9)','rgba(212,168,67,0.9)'];
+  [{x:.2,y:.3},{x:.7,y:.2},{x:.5,y:.7},{x:.8,y:.6},{x:.3,y:.5},{x:.6,y:.35},{x:.45,y:.55}].forEach((p,i)=>{
+    const px=p.x*W,py=p.y*H,pr=3.5;
+    const pg=ctx.createRadialGradient(px,py,0,px,py,pr*6);
+    pg.addColorStop(0,colors[i]);pg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=pg;ctx.fillRect(px-pr*6,py-pr*6,pr*12,pr*12);
+    ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,0.95)';ctx.fill();
+  });
+  ctx.font='10px monospace';ctx.fillStyle='rgba(255,255,255,0.03)';ctx.fillText('0x7 FINAL',W-65,H-11);
+  const id=ctx.getImageData(0,0,W,H);
+  ctx.putImageData(encodeLSB(id,FINAL_FLAG),0,0);
+}
+
+function downloadFinal(){
+  const cv=document.getElementById('finalCanvas');
+  const a=document.createElement('a');a.download='Spectre_Final.png';a.href=cv.toDataURL('image/png');a.click();
+}
+
+// ═══ SLIDER ═══
+function updateSliderForSpectre(i){
+  if(!canvases[i]) return;
+  const s=S[i];const accents=SPECTRE_ACCENTS[i];
+  const card=document.getElementById('sliderCard');
+  card.style.setProperty('--slider-accent-1',accents[0]);
+  card.style.setProperty('--slider-accent-2',accents[1]);
+  document.getElementById('sliderEyebrowNum').textContent=`#${s.num} — ${s.title}`;
+  document.getElementById('sliderEyebrowNum').style.color=accents[0];
+  document.getElementById('sliderTag').textContent=`SP #${s.num}`;
+  document.getElementById('sliderTag').style.color=accents[0];
+  document.getElementById('sliderTag').style.borderColor=accents[0]+'44';
+  document.getElementById('sliderSpectreName').textContent=s.title;
+  document.getElementById('sliderSpectreName').style.color=accents[0];
+  document.getElementById('sliderOrigLabel').textContent=`Spectre ${s.num} · Original`;
+  document.getElementById('sliderInfoNum').textContent=`#${s.num} — ${s.title}`;
+  document.getElementById('sliderStrongAccent').style.color=accents[0];
+  document.getElementById('sliderCtxNum').textContent=String(s.num).padStart(2,'0');
+  document.getElementById('sliderCtxNum').style.color=accents[0];
+  document.getElementById('sliderCtxTitle').textContent=s.title;
+  document.getElementById('sliderCtxTitle').style.color=accents[0];
+  document.getElementById('sliderCtxSub').textContent=s.caption;
+
+  const badge=document.getElementById('sliderCtxBadge');
+  const isLsbPhase=phase[i]==='lsb'&&!solved.includes(i);
+  if(solved.includes(i)){
+    badge.textContent='RÉSOLU ✓';badge.style.color='#22c55e';badge.style.borderColor='#22c55e44';
+  } else if(isLsbPhase){
+    badge.textContent='CHERCHEZ LA FRÉQUENCE';badge.style.color=accents[0];badge.style.borderColor=accents[0]+'44';
+  } else {
+    badge.textContent='ÉNIGME';badge.style.color='#d4a843';badge.style.borderColor='rgba(212,168,67,.3)';
+  }
+
+  const huntBar=document.getElementById('sliderHuntBar');
+  if(isLsbPhase){
+    huntBar.classList.add('visible');
+    card.classList.add('hunting');
+  } else {
+    huntBar.classList.remove('visible');
+    card.classList.remove('hunting');
+  }
+
+  const cv=document.getElementById('sliderOriginal');
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,180,180);
+  ctx.drawImage(canvases[i],0,0,180,180);
+  sliderOrigData=ctx.getImageData(0,0,180,180);
+  document.getElementById('sliderOriginal').style.borderColor=accents[0]+'66';
+  document.getElementById('sliderModified').style.borderColor=accents[1]+'66';
+  document.getElementById('sliderInfoBox').style.borderColor=accents[0]+'44';
+
+  if(fragmentAlreadyRevealed.includes(i)||solved.includes(i)){
+    showFragmentReveal(i);
+  } else {
+    document.getElementById('fragmentReveal').classList.remove('visible');
+  }
+
+  document.getElementById('lsbSlider').value=0;
+  cancelDwell();
+  updateSlider(0);
+}
+
+function updateSlider(val){
+  val=parseInt(val);
+  document.getElementById('sliderVal').textContent=val;
+  document.getElementById('huntCurrent').textContent=val;
+  if(!sliderOrigData) return;
+
+  const cv=document.getElementById('sliderModified');
+  const ctx=cv.getContext('2d');
+  const orig=sliderOrigData;
+  const mod=new ImageData(new Uint8ClampedArray(orig.data),orig.width,orig.height);
+  for(let i=0;i<mod.data.length;i+=4){
+    mod.data[i]=val===0?orig.data[i]:(orig.data[i]&1)*val;
+    mod.data[i+1]=val===0?orig.data[i+1]:(orig.data[i+1]&1)*val;
+    mod.data[i+2]=val===0?orig.data[i+2]:(orig.data[i+2]&1)*val;
+  }
+  ctx.putImageData(mod,0,0);
+
+  const cx=Math.floor(orig.width/2),cy=Math.floor(orig.height/2);
+  const idx=(cy*orig.width+cx)*4;const rv=orig.data[idx];
+  document.getElementById('pixOrigVal').textContent=rv;
+  document.getElementById('pixOrigBin').textContent=rv.toString(2).padStart(8,'0');
+  document.getElementById('pixLSB').textContent=rv&1;
+  document.getElementById('pixAmpVal').textContent=(rv&1)*val;
+
+  if(currentIdx===null) return;
+  const s=S[currentIdx];
+  const isLsbPhase=phase[currentIdx]==='lsb'&&!solved.includes(currentIdx);
+  if(!isLsbPhase) return;
+
+  const dist=Math.abs(val-s.secretAmp);
+  const prox=Math.max(0,1-dist/100);
+  const pct=Math.round(prox*100);
+
+  const fill=document.getElementById('signalBarFill');
+  const dots=document.getElementById('signalDots').querySelectorAll('.signal-dot');
+  const status=document.getElementById('signalStatus');
+  const pctEl=document.getElementById('signalPct');
+  const huntFill=document.getElementById('huntProxFill');
+  const huntStatus=document.getElementById('huntStatusTxt');
+  const activeDots=Math.round(prox*5);
+  dots.forEach((d,j)=>{d.classList.toggle('active',j<activeDots);});
+  pctEl.textContent=pct+'%';
+
+  if(dist===0){
+    fill.style.width='100%';fill.style.background='#22c55e';
+    huntFill.style.width='100%';huntFill.style.background='#22c55e';
+    dots.forEach(d=>{d.classList.add('active');d.style.background='#22c55e';d.style.boxShadow='0 0 8px rgba(34,197,94,.8)';});
+    status.textContent='◈ SIGNAL EXACT — Maintenez la position…';status.style.color='#22c55e';
+    huntStatus.textContent='EXACT!';huntStatus.style.color='#22c55e';
+    document.getElementById('sliderCard').classList.remove('hunting','signal-hot');
+    document.getElementById('sliderCard').classList.add('signal-exact');
+    document.getElementById('sliderModified').classList.add('exact-glow');
+    startDwell();
+  } else {
+    cancelDwell();
+    document.getElementById('sliderCard').classList.remove('signal-exact');
+    document.getElementById('sliderModified').classList.remove('exact-glow');
+    dots.forEach(d=>{d.style.background='';d.style.boxShadow='';});
+    if(dist<=3){
+      fill.style.width='88%';fill.style.background='#86efac';
+      huntFill.style.width='88%';huntFill.style.background='#86efac';
+      status.textContent='▲▲▲ Presque là — affinez !';status.style.color='#86efac';
+      huntStatus.textContent='BRÛLANT';huntStatus.style.color='#86efac';
+      document.getElementById('sliderCard').classList.add('signal-hot');
+    } else if(dist<=10){
+      fill.style.width=pct+'%';fill.style.background='#eab308';
+      huntFill.style.width=pct+'%';huntFill.style.background='#eab308';
+      status.textContent='▲▲ Signal chaud — continuez…';status.style.color='#eab308';
+      huntStatus.textContent='CHAUD';huntStatus.style.color='#eab308';
+      document.getElementById('sliderCard').classList.add('signal-hot');
+    } else if(dist<=30){
+      fill.style.width=pct+'%';fill.style.background='#f97316';
+      huntFill.style.width=pct+'%';huntFill.style.background='#f97316';
+      status.textContent='▲ Signal détecté — cherchez encore';status.style.color='#f97316';
+      huntStatus.textContent='TIÈDE';huntStatus.style.color='#f97316';
+      document.getElementById('sliderCard').classList.remove('signal-hot');
+    } else {
+      fill.style.width=Math.max(3,pct)+'%';fill.style.background='#ef4444';
+      huntFill.style.width=Math.max(2,pct)+'%';huntFill.style.background='#ef4444';
+      status.textContent=val===0?'— En attente —':'Signal faible';status.style.color='';
+      huntStatus.textContent='FROID';huntStatus.style.color='var(--dim)';
+      document.getElementById('sliderCard').classList.remove('signal-hot');
+    }
+  }
+}
+
+// ═══ DWELL TIMER ═══
+function startDwell(){
+  if(dwellTimer) return;
+  const dz=document.getElementById('dwellZone');
+  dz.classList.add('visible');
+  dwellStart=performance.now();
+  function tick(){
+    const elapsed=performance.now()-dwellStart;
+    const pct=Math.min(100,(elapsed/DWELL_DURATION)*100);
+    const remaining=Math.max(0,(DWELL_DURATION-elapsed)/1000);
+    document.getElementById('dwellFill').style.width=pct+'%';
+    document.getElementById('dwellCountdown').textContent=remaining.toFixed(1)+'s';
+    if(elapsed>=DWELL_DURATION){
+      dz.classList.remove('visible');
+      dwellTimer=null;dwellRAF=null;dwellStart=null;
+      if(!fragmentAlreadyRevealed.includes(currentIdx)){
+        fragmentAlreadyRevealed.push(currentIdx);
+        showFragmentReveal(currentIdx);
+        markSolved(currentIdx);
+      }
+    } else {
+      dwellRAF=requestAnimationFrame(tick);
+    }
+  }
+  dwellTimer=true;
+  dwellRAF=requestAnimationFrame(tick);
+}
+
+function cancelDwell(){
+  if(!dwellTimer) return;
+  if(dwellRAF) cancelAnimationFrame(dwellRAF);
+  dwellTimer=null;dwellRAF=null;dwellStart=null;
+  document.getElementById('dwellZone').classList.remove('visible');
+  document.getElementById('dwellFill').style.width='0%';
+  document.getElementById('dwellCountdown').textContent='3.0s';
+}
+
+function showFragmentReveal(i){
+  const s=S[i];
+  document.getElementById('fragmentFlagVal').textContent=s._flag;
+  const next=i<S.length-1?`→ Spectre #${i+2} déverrouillé`:'→ Tous les fragments réunis';
+  document.getElementById('fragmentNextMsg').textContent=next;
+  document.getElementById('fragmentReveal').classList.add('visible');
+  document.getElementById('fragmentReveal').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function scrollToSlider(){
+  document.getElementById('sliderSection').scrollIntoView({behavior:'smooth',block:'start'});
+  const card=document.getElementById('sliderCard');
+  card.style.boxShadow='0 0 60px rgba(124,58,237,.3)';
+  setTimeout(()=>{card.style.boxShadow='';},1500);
+}
+
+// ═══ GRID ═══
+function buildGrid(){
+  const grid=document.getElementById('serieGrid');
+  S.forEach((s,i)=>{
+    const div=document.createElement('div');div.id=`thumb-${i}`;
+    div.className='spectre-thumb'+(i===0?' enigma-phase':' locked');
+    div.onclick=()=>clickThumb(i);
+    const c=document.createElement('canvas');c.id=`tc-${i}`;c.width=120;c.height=120;
+    const ov=document.createElement('div');ov.className='t-overlay';
+    ov.innerHTML=`<div class="t-num">${String(s.num).padStart(2,'0')}</div><div class="t-stat" id="ts-${i}">${i===0?'ÉNIGME':'VERROUILLÉ'}</div>${i>0?'<div class="lock-ico">🔒</div>':''}`;
+    div.appendChild(c);div.appendChild(ov);grid.appendChild(div);
+  });
+}
+
+function clickThumb(i){
+  if(document.getElementById(`thumb-${i}`).classList.contains('locked')) return;
+  openSpectre(i);
+}
+
+// ═══ OPEN SPECTRE ═══
+function openSpectre(i){
+  currentIdx=i;
+  const s=S[i];
+  const isSolved=solved.includes(i);
+  const currentPhase=isSolved?'done':(phase[i]||'enigma');
+
+  S.forEach((_,j)=>{document.getElementById(`thumb-${j}`)?.classList.remove('active-tab');});
+  document.getElementById(`thumb-${i}`)?.classList.add('active-tab');
+
+  const panel=document.getElementById('chPanel');panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  document.getElementById('chNum').textContent=String(s.num).padStart(2,'0');
+  document.getElementById('chTitle').textContent=s.title;
+  document.getElementById('chSub').textContent=s.sub;
+  document.getElementById('chCaption').textContent=s.caption;
+  document.getElementById('chHint').textContent=s.hint;
+  document.getElementById('chLore').innerHTML=s.lore;
+
+  const badge=document.getElementById('chBadge');
+  const card=document.getElementById('chCard');
+
+  const chCv=document.getElementById('chCanvas');
+  const ctx=chCv.getContext('2d');ctx.clearRect(0,0,chCv.width,chCv.height);
+  if(canvases[i]) ctx.drawImage(canvases[i],0,0,chCv.width,chCv.height);
+
+  document.getElementById('textEnigma').classList.remove('visible');
+  document.getElementById('pixelPuzzle').classList.remove('visible');
+  document.getElementById('lsbZone').classList.remove('visible');
+  document.getElementById('enigmaInput').value='';
+  document.getElementById('enigmaFeedback').textContent='';
+  document.getElementById('enigmaFeedback').className='enigma-feedback';
+
+  if(isSolved){
+    badge.textContent='RÉSOLU ✓';badge.className='ch-badge done-b';card.className='ch-card solved-card';
+    document.getElementById('lsbZone').classList.add('visible');
+    document.getElementById('solvedBanner').classList.add('visible');
+    document.getElementById('artFrame').classList.remove('active-glow');
+  } else if(currentPhase==='lsb'){
+    badge.textContent='LSB';badge.className='ch-badge lsb-b';card.className='ch-card lsb-card';
+    document.getElementById('lsbZone').classList.add('visible');
+    document.getElementById('solvedBanner').classList.remove('visible');
+    document.getElementById('artFrame').classList.add('active-glow');
+    resetSignalMeter();
+  } else {
+    badge.textContent='ÉNIGME';badge.className='ch-badge enigma-b';card.className='ch-card enigma-card';
+    document.getElementById('artFrame').classList.remove('active-glow');
+    if(s.enigmaType==='text'){
+      document.getElementById('textEnigma').classList.add('visible');
+      document.getElementById('enigmaQ').textContent=s.question;
+    } else {
+      document.getElementById('pixelPuzzle').classList.add('visible');
+      buildPixelPuzzle(s);
+    }
+  }
+  updateSliderForSpectre(i);
+}
+
+function resetSignalMeter(){
+  document.getElementById('signalBarFill').style.width='0%';
+  document.getElementById('signalPct').textContent='0%';
+  document.getElementById('signalStatus').textContent='— En attente —';
+  document.getElementById('signalStatus').style.color='';
+  document.getElementById('signalDots').querySelectorAll('.signal-dot').forEach(d=>{
+    d.classList.remove('active');d.style.background='';d.style.boxShadow='';
+  });
+  document.getElementById('sliderCard').classList.remove('signal-exact','signal-hot');
+}
+
+// ═══ TEXT ENIGMA ═══
+function checkTextEnigma(){
+  const inp=document.getElementById('enigmaInput').value.trim().toLowerCase();
+  const s=S[currentIdx];
+  const fb=document.getElementById('enigmaFeedback');
+  if(s.answer.some(a=>inp===a.toLowerCase())){
+    fb.textContent='✓ Correct — fréquence débloquée';fb.className='enigma-feedback ok';
+    setTimeout(()=>unlockLSBPhase(currentIdx),700);
+  } else {
+    fb.textContent='✗ Réponse incorrecte. Réessayez.';fb.className='enigma-feedback err';
+    document.getElementById('enigmaInput').style.borderColor='rgba(255,95,86,.5)';
+    setTimeout(()=>{document.getElementById('enigmaInput').style.borderColor='';},800);
+  }
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('textEnigma').classList.contains('visible'))
+    checkTextEnigma();
+});
+
+// ═══ PIXEL PUZZLE ═══
+function buildPixelPuzzle(s){
+  const grid=document.getElementById('pixelGrid');grid.innerHTML='';
+  document.getElementById('puzzleIntro').innerHTML=s.puzzleIntro;
+  const vals=s.pixelValues;
+  const cols=vals.length===16?4:8;
+  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  const correctSet=new Set(vals.map((v,i)=>v%2===1?i:-1).filter(x=>x>=0));
+  puzzleState={correct:new Set(),total:correctSet.size,answers:correctSet,cells:[],resetting:false};
+  document.getElementById('puzzleTotal').textContent=correctSet.size;
+  document.getElementById('puzzleProgress').textContent='0';
+  const hints={2:"Les valeurs impaires ont un LSB de 1.",4:"01000001 en binaire = 65 = 'A'. Trouvez la séquence !",6:"Cherchez les valeurs impaires dans la grille."};
+  document.getElementById('puzzleHint').textContent=hints[currentIdx+1]||'';
+  vals.forEach((v,i)=>{
+    const cell=document.createElement('div');cell.className='px-cell';
+    cell.style.background=`rgba(${Math.floor(v*.6)},${Math.floor(v*.2)},${Math.floor(v*.9)},0.6)`;
+    cell.title=`Valeur: ${v} | Binaire: ${v.toString(2).padStart(8,'0')}`;
+    cell.style.cssText+=';display:flex;align-items:center;justify-content:center;font-size:.52rem;font-family:JetBrains Mono,monospace;color:rgba(255,255,255,.6)';
+    cell.textContent=v;
+    cell.onclick=()=>clickPixelCell(i,correctSet.has(i),cell);
+    grid.appendChild(cell);puzzleState.cells.push(cell);
+  });
+}
+
+function clickPixelCell(i,isCorrect,cell){
+  if(cell.classList.contains('correct')||puzzleState.resetting) return;
+  if(isCorrect){
+    cell.classList.add('correct');puzzleState.correct.add(i);
+    document.getElementById('puzzleProgress').textContent=puzzleState.correct.size;
+    if(puzzleState.correct.size===puzzleState.total) setTimeout(()=>unlockLSBPhase(currentIdx),500);
+  } else {
+    puzzleState.resetting=true;
+    cell.classList.add('wrong');
+    puzzleState.cells.forEach(c=>{if(c.classList.contains('correct')){c.classList.remove('correct');c.classList.add('wrong');}});
+    const hint=document.getElementById('puzzleHint');const prevHint=hint.textContent;
+    hint.textContent='✗ Erreur — Remise à zéro…';hint.style.color='#ff5f56';
+    setTimeout(()=>{
+      puzzleState.cells.forEach(c=>{c.classList.remove('correct','wrong');});
+      puzzleState.correct=new Set();
+      document.getElementById('puzzleProgress').textContent='0';
+      hint.textContent=prevHint;hint.style.color='';
+      puzzleState.resetting=false;
+    },800);
+  }
+}
+
+// ═══ UNLOCK LSB PHASE ═══
+function unlockLSBPhase(i){phase[i]='lsb';openSpectre(i);}
+
+// ═══ MARK SOLVED ═══
+function markSolved(i){
+  if(solved.includes(i)) return;
+  solved.push(i);
+  document.getElementById('solvedBanner').classList.add('visible');
+  document.getElementById('chBadge').textContent='RÉSOLU ✓';document.getElementById('chBadge').className='ch-badge done-b';
+  document.getElementById('chCard').classList.add('solved-card');document.getElementById('chCard').classList.remove('lsb-card');
+  const thumb=document.getElementById(`thumb-${i}`);
+  thumb.className='spectre-thumb solved active-tab';
+  const ts=document.getElementById(`ts-${i}`);if(ts) ts.textContent='RÉSOLU';
+  if(i+1<S.length){
+    setTimeout(()=>{
+      const nt=document.getElementById(`thumb-${i+1}`);
+      nt.className='spectre-thumb enigma-phase';
+      const li=nt.querySelector('.lock-ico');if(li) li.remove();
+      const ns=document.getElementById(`ts-${i+1}`);if(ns) ns.textContent='ÉNIGME';
+      nt.style.boxShadow='0 0 28px rgba(212,168,67,.5)';
+      setTimeout(()=>{nt.style.boxShadow='';},1800);
+    },900);
+  }
+  updateProgress();
+  updateSliderForSpectre(i);
+  if(solved.length===S.length) setTimeout(revealFinal,1200);
+}
+
+function updateProgress(){
+  const pct=(solved.length/S.length)*100;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('solvedCount').textContent=solved.length;
+}
+
+function revealFinal(){
+  const fs=document.getElementById('finalSection');fs.classList.add('visible');
+  fs.scrollIntoView({behavior:'smooth'});
+}
+
+// ═══ FINAL SLIDER ═══
+function initFinalSlider(){
+  const cv=document.getElementById('finalSliderOrig');
+  const fc=document.getElementById('finalCanvas');
+  if(!fc) return;
+  cv.getContext('2d').drawImage(fc,0,0,cv.width,cv.height);
+  finalOrigData=cv.getContext('2d').getImageData(0,0,cv.width,cv.height);
+  updateFinalSlider(0);
+}
+
+function updateFinalSlider(val){
+  val=parseInt(val);
+  document.getElementById('finalSliderVal').textContent=val;
+  if(!finalOrigData) return;
+
+  const cv=document.getElementById('finalSliderMod');
+  const ctx=cv.getContext('2d');
+  const orig=finalOrigData;
+  const mod=new ImageData(new Uint8ClampedArray(orig.data),orig.width,orig.height);
+  for(let i=0;i<mod.data.length;i+=4){
+    mod.data[i]=val===0?orig.data[i]:(orig.data[i]&1)*val;
+    mod.data[i+1]=val===0?orig.data[i+1]:(orig.data[i+1]&1)*val;
+    mod.data[i+2]=val===0?orig.data[i+2]:(orig.data[i+2]&1)*val;
+  }
+  ctx.putImageData(mod,0,0);
+
+  const dist=Math.abs(val-FINAL_SECRET_AMP);
+  const prox=Math.max(0,1-dist/100);
+  const pct=Math.round(prox*100);
+  const fill=document.getElementById('finalHuntFill');
+  const info=document.getElementById('finalHuntInfo');
+  const dots=document.getElementById('finalSignalDots').querySelectorAll('.final-sdot');
+  const activeDots=Math.round(prox*7);
+  dots.forEach((d,i)=>{
+    d.classList.toggle('active',i<activeDots);
+    if(i<activeDots){d.style.background='var(--gold)';d.style.boxShadow='0 0 6px rgba(212,168,67,.6)';}
+    else{d.style.background='';d.style.boxShadow='';}
+  });
+
+  if(dist===0){
+    fill.style.width='100%';fill.style.background='#d4a843';
+    info.textContent='◈ FRÉQUENCE EXACTE — Maintenez la position…';info.style.color='var(--gold)';
+    document.getElementById('finalSliderMod').classList.add('final-exact');
+    startFinalDwell();
+  } else {
+    cancelFinalDwell();
+    document.getElementById('finalSliderMod').classList.remove('final-exact');
+    if(dist<=3){
+      fill.style.width='88%';fill.style.background='#fbbf24';
+      info.textContent='▲▲▲ Très proche — affinez encore !';info.style.color='#fbbf24';
+    } else if(dist<=10){
+      fill.style.width=pct+'%';fill.style.background='#f59e0b';
+      info.textContent='▲▲ Signal chaud — continuez…';info.style.color='#f59e0b';
+    } else if(dist<=30){
+      fill.style.width=pct+'%';fill.style.background='#f97316';
+      info.textContent='▲ Signal faible — cherchez encore';info.style.color='#f97316';
+    } else {
+      fill.style.width=Math.max(2,pct)+'%';fill.style.background='#ef4444';
+      info.textContent=val===0?'— Déplacez le curseur pour sonder les fréquences —':'Signal très faible';
+      info.style.color='';
+    }
+  }
+}
+
+// ═══ FINAL DWELL ═══
+function startFinalDwell(){
+  if(finalDwellTimer) return;
+  const dz=document.getElementById('finalDwellZone');
+  dz.classList.add('visible');
+  finalDwellStart=performance.now();
+  function tick(){
+    const elapsed=performance.now()-finalDwellStart;
+    const pct=Math.min(100,(elapsed/DWELL_DURATION)*100);
+    const remaining=Math.max(0,(DWELL_DURATION-elapsed)/1000);
+    document.getElementById('finalDwellFill').style.width=pct+'%';
+    document.getElementById('finalDwellCountdown').textContent=remaining.toFixed(1)+'s';
+    if(elapsed>=DWELL_DURATION){
+      dz.classList.remove('visible');
+      finalDwellTimer=null;finalDwellRAF=null;finalDwellStart=null;
+      if(!document.getElementById('finalFlagReveal').classList.contains('visible')){
+        document.getElementById('finalFlagVal2').textContent=FINAL_FLAG;
+        document.getElementById('finalFlagReveal').classList.add('visible');
+        document.getElementById('finalFlagReveal').scrollIntoView({behavior:'smooth',block:'nearest'});
+      }
+    } else {
+      finalDwellRAF=requestAnimationFrame(tick);
+    }
+  }
+  finalDwellTimer=true;
+  finalDwellRAF=requestAnimationFrame(tick);
+}
+
+function cancelFinalDwell(){
+  if(!finalDwellTimer) return;
+  if(finalDwellRAF) cancelAnimationFrame(finalDwellRAF);
+  finalDwellTimer=null;finalDwellRAF=null;finalDwellStart=null;
+  document.getElementById('finalDwellZone').classList.remove('visible');
+  document.getElementById('finalDwellFill').style.width='0%';
+  document.getElementById('finalDwellCountdown').textContent='3.0s';
+}
+</script>
+</body>
+</html>
