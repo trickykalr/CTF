@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SÉRIE SPECTRE — Galerie 0x7</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+/* Mise à jour des polices : Syne pour le design, Space Mono pour le côté technique, Playfair pour l'élégance */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,900;1,400&display=swap');
+
 :root{
   --void:#02010a;--panel:#0e0819;--panel2:#0a0614;
   --border:#1e1030;--border2:#2a1848;
@@ -13,41 +15,39 @@
   --gold:#d4a843;--cream:#e8dfc8;--fog:#6b5b8a;
   --dim:#3d2a5c;--text:#b8a9cc;--white:#f0e8ff;--green:#22c55e;
   --slider-accent-1:var(--purple);--slider-accent-2:var(--pink);
-  --ff-display:'Bebas Neue','Arial Black',sans-serif;
-  --ff-mono:'IBM Plex Mono','Courier New',monospace;
-  --ff-body:'Cormorant Garamond',Georgia,serif;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-::selection{background:rgba(124,58,237,.35);color:var(--white);}
-::-moz-selection{background:rgba(124,58,237,.35);color:var(--white);}
 html{scroll-behavior:smooth;}
-body{background:var(--void);color:var(--text);font-family:var(--ff-body);min-height:100vh;cursor:crosshair;}
+/* Application de Playfair Display au corps du texte */
+body{background:var(--void);color:var(--text);font-family:'Playfair Display', serif;min-height:100vh;cursor:crosshair;}
 .ambient{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 30%,rgba(124,58,237,.1) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 80% 70%,rgba(168,85,247,.07) 0%,transparent 70%);}
 .grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.28;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px;}
 #loader{position:fixed;inset:0;z-index:1000;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity 1s,visibility 1s;}
 #loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
 .loader-eye{font-size:3rem;animation:eyePulse 2s ease-in-out infinite;}
 @keyframes eyePulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 8px rgba(168,85,247,.5));}50%{transform:scale(1.15);filter:drop-shadow(0 0 24px rgba(168,85,247,.9));}}
-.loader-txt{font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.45em;color:var(--dim);}
+/* Space Mono pour les éléments techniques */
+.loader-txt{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:.4em;color:var(--dim);}
 .loader-bar{width:220px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;}
 .loader-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--purple),var(--violet),var(--pink));animation:loadbar 2.6s ease forwards;}
 @keyframes loadbar{to{width:100%}}
 #site{position:relative;z-index:1;opacity:0;transition:opacity 1s;}
 #site.visible{opacity:1;}
 header{padding:50px 40px 0;display:flex;align-items:flex-start;justify-content:space-between;max-width:1200px;margin:0 auto;}
-.gallery-name{font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.45em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;}
-.artist-name{font-family:var(--ff-display);font-size:clamp(3rem,7vw,5.5rem);font-weight:400;color:var(--white);line-height:.95;letter-spacing:.12em;position:relative;}
+.gallery-name{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.4em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;}
+/* Syne pour les titres d'impact */
+.artist-name{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:800;color:var(--white);line-height:1;letter-spacing:.05em;position:relative;}
 .artist-name::after{content:attr(data-text);position:absolute;inset:0;background:linear-gradient(135deg,var(--gold) 0%,var(--violet) 50%,var(--pink) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.65;mix-blend-mode:screen;}
-.artist-sub{font-family:var(--ff-body);font-style:italic;font-size:.92rem;color:var(--fog);margin-top:8px;}
-.header-right{text-align:right;font-family:var(--ff-mono);font-size:.62rem;color:var(--dim);line-height:2.2;letter-spacing:.08em;}
+.artist-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:.9rem;color:var(--fog);margin-top:8px;}
+.header-right{text-align:right;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--dim);line-height:2.2;letter-spacing:.08em;}
 .header-right span{color:var(--violet);}
 .hero-rule{max-width:1200px;margin:36px auto 0;padding:0 40px;display:flex;align-items:center;gap:20px;}
 .rule-line{flex:1;height:1px;background:var(--border);}
-.rule-ornament{font-family:var(--ff-mono);font-size:.65rem;letter-spacing:.3em;color:var(--dim);white-space:nowrap;}
+.rule-ornament{font-family:'Syne',sans-serif;font-size:.68rem;letter-spacing:.3em;color:var(--dim);white-space:nowrap;}
 .progress-section{max-width:1200px;margin:48px auto 0;padding:0 40px;}
 .progress-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
-.progress-label{font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.35em;color:var(--dim);text-transform:uppercase;}
-.progress-count{font-family:var(--ff-display);font-size:1.4rem;color:var(--violet);letter-spacing:.08em;}
+.progress-label{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;}
+.progress-count{font-family:'Syne',sans-serif;font-size:1.1rem;color:var(--violet);}
 .progress-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
 .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--purple),var(--violet),var(--pink));border-radius:2px;transition:width .8s ease;}
 .serie-section{max-width:1200px;margin:48px auto 0;padding:0 40px;}
@@ -57,8 +57,8 @@ header{padding:50px 40px 0;display:flex;align-items:flex-start;justify-content:s
 .spectre-thumb{aspect-ratio:1;border-radius:3px;position:relative;overflow:hidden;cursor:pointer;transition:all .3s;border:1px solid var(--border);}
 .spectre-thumb canvas{width:100%;height:100%;display:block;transition:filter .3s;}
 .spectre-thumb .t-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(2,1,10,.75);transition:all .3s;}
-.spectre-thumb .t-num{font-family:var(--ff-display);font-size:1.6rem;letter-spacing:.08em;color:var(--border2);}
-.spectre-thumb .t-stat{font-family:var(--ff-mono);font-size:.46rem;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);}
+.spectre-thumb .t-num{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--border2);}
+.spectre-thumb .t-stat{font-family:'Space Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);}
 .spectre-thumb.locked{cursor:not-allowed;}
 .spectre-thumb.locked canvas{filter:saturate(.08) brightness(.25);}
 .spectre-thumb.locked .t-overlay{background:rgba(2,1,10,.9);}
@@ -86,11 +86,11 @@ header{padding:50px 40px 0;display:flex;align-items:flex-start;justify-content:s
 .ch-card.lsb-card::before{background:linear-gradient(90deg,var(--purple),var(--violet),var(--purple));background-size:200%;animation:slideGrad 3s linear infinite;}
 @keyframes slideGrad{0%{background-position:0%}100%{background-position:200%}}
 .ch-head{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px;}
-.ch-num{font-family:var(--ff-display);font-size:4rem;font-weight:400;color:var(--border2);line-height:.9;min-width:60px;letter-spacing:.04em;}
+.ch-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--border2);line-height:1;min-width:56px;}
 .ch-info{flex:1;}
-.ch-title{font-family:var(--ff-display);font-size:1.5rem;color:var(--white);letter-spacing:.14em;line-height:1;}
-.ch-sub{font-family:var(--ff-body);font-style:italic;font-size:.88rem;color:var(--fog);margin-top:4px;}
-.ch-badge{font-family:var(--ff-mono);font-size:.56rem;letter-spacing:.28em;padding:5px 14px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);}
+.ch-title{font-family:'Syne',sans-serif;font-size:1.25rem;color:var(--white);letter-spacing:.05em;}
+.ch-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:.83rem;color:var(--fog);margin-top:3px;}
+.ch-badge{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:4px 12px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);}
 .ch-badge.enigma-b{background:rgba(212,168,67,.1);border-color:rgba(212,168,67,.3);color:var(--gold);}
 .ch-badge.lsb-b{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3);color:var(--violet);animation:pulseBadge 2s ease-in-out infinite;}
 @keyframes pulseBadge{0%,100%{opacity:1}50%{opacity:.55}}
@@ -106,32 +106,32 @@ header{padding:50px 40px 0;display:flex;align-items:flex-start;justify-content:s
 .art-frame::before{top:4px;left:4px;border-width:1px 0 0 1px;}
 .art-frame::after{bottom:4px;right:4px;border-width:0 1px 1px 0;}
 .art-canvas{display:block;width:100%;}
-.art-caption{font-family:var(--ff-mono);font-size:.5rem;letter-spacing:.22em;color:var(--dim);text-align:center;margin-top:7px;text-transform:uppercase;}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;padding:11px 14px;border-radius:3px;cursor:pointer;transition:all .2s;text-decoration:none;margin-bottom:10px;border:none;}
+.art-caption{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.2em;color:var(--dim);text-align:center;margin-top:7px;text-transform:uppercase;}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:'Space Mono',monospace;font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;padding:11px 14px;border-radius:3px;cursor:pointer;transition:all .2s;text-decoration:none;margin-bottom:10px;border:none;}
 .btn-violet{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.35);color:var(--violet);}
 .btn-violet:hover{background:rgba(124,58,237,.22);border-color:var(--violet);}
 .btn-gold{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.3);color:var(--gold);}
 .btn-gold:hover{background:rgba(212,168,67,.22);border-color:var(--gold);}
 .hint-blk{border:1px dashed rgba(212,168,67,.3);background:rgba(212,168,67,.04);border-radius:3px;padding:12px 15px;margin-bottom:14px;}
-.hint-lbl{font-family:var(--ff-mono);font-size:.52rem;letter-spacing:.35em;color:rgba(212,168,67,.45);text-transform:uppercase;margin-bottom:5px;}
-.hint-txt{font-family:var(--ff-body);font-style:italic;font-size:.92rem;color:var(--gold);line-height:1.65;}
+.hint-lbl{font-family:'Space Mono',monospace;font-size:.54rem;letter-spacing:.3em;color:rgba(212,168,67,.45);text-transform:uppercase;margin-bottom:5px;}
+.hint-txt{font-style:italic;font-size:.87rem;color:var(--gold);line-height:1.6;}
 .lore-blk{margin-bottom:16px;}
-.lore-lbl{font-family:var(--ff-mono);font-size:.54rem;letter-spacing:.42em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.lore-txt{font-family:var(--ff-body);font-size:.96rem;line-height:1.88;color:var(--text);}
+.lore-lbl{font-family:'Space Mono',monospace;font-size:.54rem;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.lore-txt{font-size:.88rem;line-height:1.82;color:var(--text);}
 .lore-txt em{color:var(--cream);font-style:italic;}
 .enigma-zone{display:none;}
 .enigma-zone.visible{display:block;}
 .enigma-box{background:rgba(212,168,67,.04);border:1px solid rgba(212,168,67,.2);border-radius:3px;padding:18px;margin-bottom:14px;}
-.enigma-q{font-family:var(--ff-body);font-size:1.08rem;color:var(--cream);line-height:1.72;margin-bottom:14px;font-style:normal;font-weight:400;}
-.enigma-input{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--border2);border-radius:3px;padding:10px 14px;font-family:var(--ff-mono);font-size:.78rem;color:var(--gold);letter-spacing:.06em;outline:none;transition:border-color .2s;}
+.enigma-q{font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);line-height:1.7;margin-bottom:14px;}
+.enigma-input{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--border2);border-radius:3px;padding:10px 14px;font-family:'Space Mono',monospace;font-size:.8rem;color:var(--gold);letter-spacing:.05em;outline:none;transition:border-color .2s;}
 .enigma-input:focus{border-color:rgba(212,168,67,.5);}
 .enigma-input::placeholder{color:var(--dim);}
-.enigma-feedback{font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.12em;margin-top:8px;min-height:18px;}
+.enigma-feedback{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.1em;margin-top:8px;min-height:18px;}
 .enigma-feedback.err{color:#ff5f56;}
 .enigma-feedback.ok{color:var(--green);}
 .puzzle-zone{display:none;}
 .puzzle-zone.visible{display:block;}
-.puzzle-intro{font-family:var(--ff-body);font-size:.9rem;color:var(--text);line-height:1.75;margin-bottom:14px;}
+.puzzle-intro{font-size:.85rem;color:var(--text);line-height:1.7;margin-bottom:14px;}
 .puzzle-intro em{color:var(--cream);font-style:italic;}
 .pixel-grid-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:14px;}
 .pixel-grid{display:grid;gap:3px;background:rgba(0,0,0,.4);border:1px solid var(--border2);border-radius:3px;padding:12px;cursor:pointer;}
@@ -140,36 +140,36 @@ header{padding:50px 40px 0;display:flex;align-items:flex-start;justify-content:s
 .px-cell.correct{border-color:var(--green);box-shadow:0 0 8px rgba(34,197,94,.4);}
 .px-cell.wrong{border-color:#ff5f56;animation:shake .3s ease;}
 @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
-.puzzle-progress{font-family:var(--ff-mono);font-size:.63rem;color:var(--dim);letter-spacing:.18em;}
+.puzzle-progress{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--dim);letter-spacing:.15em;}
 .puzzle-progress span{color:var(--violet);}
-.puzzle-hint{font-family:var(--ff-mono);font-size:.7rem;color:var(--fog);margin-top:6px;font-style:italic;}
+.puzzle-hint{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--fog);margin-top:6px;font-style:italic;}
 .lsb-zone{display:none;}
 .lsb-zone.visible{display:block;}
 .freq-unlock{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.2);border-radius:3px;padding:16px 18px;margin-bottom:14px;}
-.freq-unlock-head{font-family:var(--ff-mono);font-size:.56rem;letter-spacing:.3em;color:var(--green);text-transform:uppercase;margin-bottom:8px;}
-.freq-unlock-msg{font-family:var(--ff-body);font-size:.92rem;color:var(--text);line-height:1.75;margin-bottom:12px;}
+.freq-unlock-head{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--green);text-transform:uppercase;margin-bottom:8px;}
+.freq-unlock-msg{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:12px;}
 .freq-unlock-msg em{color:var(--cream);}
 .freq-amp-display{display:flex;align-items:center;gap:14px;background:rgba(0,0,0,.4);border:1px solid rgba(124,58,237,.3);border-radius:3px;padding:12px 16px;margin-bottom:14px;}
-.freq-amp-label{font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;flex:1;}
-.freq-amp-value{font-family:var(--ff-display);font-size:2.6rem;font-weight:400;color:var(--violet);line-height:1;letter-spacing:.06em;animation:ampPulse 2s ease-in-out infinite;}
+.freq-amp-label{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;flex:1;}
+.freq-amp-value{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--violet);line-height:1;animation:ampPulse 2s ease-in-out infinite;}
 @keyframes ampPulse{0%,100%{text-shadow:0 0 0 rgba(168,85,247,0)}50%{text-shadow:0 0 20px rgba(168,85,247,.5)}}
-.freq-amp-unit{font-family:var(--ff-mono);font-size:.62rem;color:var(--dim);}
+.freq-amp-unit{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--dim);}
 .signal-meter{background:rgba(0,0,0,.35);border:1px solid var(--border2);border-radius:3px;padding:12px 14px;margin-bottom:14px;}
-.signal-meter-head{font-family:var(--ff-mono);font-size:.56rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between;}
+.signal-meter-head{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between;}
 .signal-bar-track{height:8px;background:rgba(0,0,0,.5);border-radius:4px;overflow:hidden;margin-bottom:7px;}
 .signal-bar-fill{height:100%;width:0%;border-radius:4px;transition:width .2s,background .2s;}
 .signal-dots{display:flex;gap:5px;margin-bottom:6px;}
 .signal-dot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:background .2s,box-shadow .2s;}
 .signal-dot.active{background:var(--violet);box-shadow:0 0 6px rgba(168,85,247,.6);}
-.signal-status{font-family:var(--ff-mono);font-size:.66rem;color:var(--dim);letter-spacing:.1em;transition:color .2s;}
-.btn-scroll-slider{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:var(--ff-mono);font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;padding:10px 14px;border-radius:3px;cursor:pointer;transition:all .2s;border:1px solid rgba(124,58,237,.4);background:rgba(124,58,237,.08);color:var(--violet);margin-top:4px;}
+.signal-status{font-family:'Space Mono',monospace;font-size:.66rem;color:var(--dim);letter-spacing:.1em;transition:color .2s;}
+.btn-scroll-slider{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 14px;border-radius:3px;cursor:pointer;transition:all .2s;border:1px solid rgba(124,58,237,.4);background:rgba(124,58,237,.08);color:var(--violet);margin-top:4px;}
 .btn-scroll-slider:hover{background:rgba(124,58,237,.18);border-color:var(--violet);}
 .btn-scroll-slider .arrow{animation:bounceDown 1.5s ease-in-out infinite;}
 @keyframes bounceDown{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
-.solved-banner{display:none;margin-top:12px;padding:12px 16px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);border-radius:3px;font-family:var(--ff-mono);font-size:.68rem;color:var(--green);text-align:center;}
+.solved-banner{display:none;margin-top:12px;padding:12px 16px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);border-radius:3px;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--green);text-align:center;}
 .solved-banner.visible{display:block;}
 .slider-section{max-width:1200px;margin:56px auto 0;padding:0 40px;}
-.section-eyebrow{font-family:var(--ff-mono);font-size:.58rem;letter-spacing:.45em;color:var(--dim);text-transform:uppercase;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.section-eyebrow{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.4em;color:var(--dim);text-transform:uppercase;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);}
 .section-eyebrow .eyebrow-spectre{color:var(--violet);transition:color .5s;}
 .slider-card{border:1px solid var(--border2);background:var(--panel);border-radius:4px;overflow:hidden;position:relative;transition:border-color .5s,box-shadow .5s;}
 .slider-card.hunting{border-color:rgba(124,58,237,.4);box-shadow:0 0 30px rgba(124,58,237,.08);}
@@ -179,493 +179,31 @@ header{padding:50px 40px 0;display:flex;align-items:flex-start;justify-content:s
 .slider-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--slider-accent-1),var(--slider-accent-2));transition:background .6s ease;}
 .slider-head{padding:18px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;}
 .slider-icon{font-size:1.4rem;}
-.slider-title{font-family:var(--ff-display);font-size:1.15rem;color:var(--white);letter-spacing:.1em;}
-.slider-spectre-tag{font-family:var(--ff-mono);font-size:.58rem;letter-spacing:.2em;padding:3px 10px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);transition:all .5s;margin-left:8px;}
-.slider-sub{font-family:var(--ff-mono);font-size:.62rem;color:var(--dim);margin-top:3px;}
+.slider-title{font-family:'Syne',sans-serif;font-size:1rem;color:var(--white);}
+.slider-spectre-tag{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:3px 10px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);transition:all .5s;margin-left:8px;}
+.slider-sub{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--dim);margin-top:3px;}
 .slider-context-bar{padding:10px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.2);transition:all .5s;}
-.slider-context-num{font-family:var(--ff-display);font-size:1.8rem;font-weight:400;color:var(--border2);line-height:1;letter-spacing:.06em;transition:color .5s;}
+.slider-context-num{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--border2);line-height:1;transition:color .5s;}
 .slider-context-info{flex:1;}
-.slider-context-title{font-family:var(--ff-display);font-size:1rem;color:var(--white);letter-spacing:.1em;transition:color .5s;}
-.slider-context-sub{font-family:var(--ff-mono);font-size:.56rem;color:var(--dim);margin-top:2px;letter-spacing:.1em;}
-.slider-context-badge{font-family:var(--ff-mono);font-size:.55rem;letter-spacing:.15em;padding:3px 9px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);transition:all .5s;}
+.slider-context-title{font-family:'Syne',sans-serif;font-size:.9rem;color:var(--white);transition:color .5s;}
+.slider-context-sub{font-family:'Space Mono',monospace;font-size:.56rem;color:var(--dim);margin-top:2px;letter-spacing:.1em;}
+.slider-context-badge{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.15em;padding:3px 9px;border-radius:20px;text-transform:uppercase;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--violet);transition:all .5s;}
 .slider-hunt-bar{display:none;padding:10px 26px;border-bottom:1px solid var(--border);background:rgba(124,58,237,.05);}
 .slider-hunt-bar.visible{display:flex;align-items:center;gap:12px;}
-.hunt-label{font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;white-space:nowrap;}
-.hunt-target{font-family:var(--ff-display);font-size:1.1rem;font-weight:400;color:var(--violet);letter-spacing:.06em;}
-.hunt-current{font-family:var(--ff-mono);font-size:.75rem;color:var(--text);min-width:40px;}
+.hunt-label{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;white-space:nowrap;}
+.hunt-target{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--violet);}
+.hunt-current{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--text);min-width:40px;}
 .hunt-proximity-track{flex:1;height:6px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden;}
 .hunt-proximity-fill{height:100%;width:0%;border-radius:3px;transition:width .15s,background .15s;}
-.hunt-status-txt{font-family:var(--ff-mono);font-size:.62rem;min-width:80px;text-align:right;transition:color .2s;}
+.hunt-status-txt{font-family:'Space Mono',monospace;font-size:.62rem;min-width:80px;text-align:right;transition:color .2s;}
 .slider-body{padding:26px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
 @media(max-width:700px){.slider-body{grid-template-columns:1fr;}}
-.slider-desc{font-family:var(--ff-body);font-size:.92rem;line-height:1.82;color:var(--text);margin-bottom:20px;}
+.slider-desc{font-size:.88rem;line-height:1.78;color:var(--text);margin-bottom:20px;}
 .slider-desc em{color:var(--cream);font-style:italic;}
-.slider-desc strong{font-family:var(--ff-mono);font-size:.8rem;color:var(--violet);font-weight:400;transition:color .5s;}
+.slider-desc strong{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--violet);font-weight:400;transition:color .5s;}
 .lsb-control{margin-bottom:18px;}
-.wave-reveal-canvas{position:absolute;inset:10px;pointer-events:none;border-radius:2px;z-index:10;opacity:1;}
-@keyframes waveFlash{0%{opacity:0;box-shadow:0 0 0 rgba(34,197,94,0);}30%{opacity:1;box-shadow:0 0 40px rgba(34,197,94,.5);}100%{opacity:0;box-shadow:0 0 0 rgba(34,197,94,0);}}
 </style>
 </head>
 <body>
-<div class="ambient"></div>
-<div class="grain"></div>
-
-<div id="loader">
-  <div class="loader-eye">👁</div>
-  <div class="loader-txt">INITIALISATION DU PROTOCOLE</div>
-  <div class="loader-bar"><div class="loader-fill"></div></div>
-</div>
-
-<div id="site">
-  <header>
-    <div>
-      <div class="gallery-name">Galerie 0x7</div>
-      <div class="artist-name" data-text="SPECTRE">SPECTRE</div>
-      <div class="artist-sub">Protocole Zéro — série complète</div>
-    </div>
-    <div class="header-right">
-      ŒUVRES <span>07</span><br>
-      RÉSOLUES <span id="hdr-solved">00</span><br>
-      PROTOCOLE <span>ACTIF</span>
-    </div>
-  </header>
-
-  <div class="hero-rule">
-    <div class="rule-line"></div>
-    <div class="rule-ornament">✦ SÉRIE SPECTRE ✦</div>
-    <div class="rule-line"></div>
-  </div>
-
-  <div class="progress-section">
-    <div class="progress-header">
-      <div class="progress-label">Progression du protocole</div>
-      <div class="progress-count" id="prog-count">0 / 7</div>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="prog-fill"></div>
-    </div>
-  </div>
-
-  <div class="serie-section">
-    <div class="serie-grid" id="serie-grid"></div>
-  </div>
-
-  <div class="ch-panel" id="ch-panel">
-    <div class="ch-card" id="ch-card">
-      <div class="ch-head">
-        <div class="ch-num" id="ch-num">01</div>
-        <div class="ch-info">
-          <div class="ch-title" id="ch-title">L'ÉVEIL</div>
-          <div class="ch-sub" id="ch-sub">Premier fragment — texte</div>
-        </div>
-        <div class="ch-badge enigma-b" id="ch-badge">Énigme</div>
-      </div>
-      <div class="ch-body">
-        <div class="ch-left">
-          <div class="art-frame" id="art-frame">
-            <canvas class="art-canvas" id="art-canvas" width="400" height="400"></canvas>
-          </div>
-          <div class="art-caption" id="art-caption">spectre-01 · fragment·alpha</div>
-        </div>
-        <div class="ch-right">
-          <div class="lore-blk">
-            <div class="lore-lbl">Fragment de manifeste</div>
-            <div class="lore-txt" id="lore-txt">
-              0x7 a commencé la série Spectre en mars 2023. Ce tableau marque le début d'un projet qu'il nommera <em>Protocole Zéro</em>. Il aurait caché quelque chose dans chaque œuvre depuis le premier jour.
-            </div>
-          </div>
-
-          <div class="enigma-zone visible" id="enigma-zone">
-            <div class="enigma-box">
-              <div class="enigma-q" id="enigma-q">Quelle est la valeur maximale d'un octet en base 10 ?</div>
-              <input class="enigma-input" id="enigma-input" type="text" placeholder="Votre réponse…" autocomplete="off">
-              <div class="enigma-feedback" id="enigma-feedback"></div>
-            </div>
-            <button class="btn btn-gold" id="enigma-submit">✦ Valider la réponse</button>
-            <div class="hint-blk" id="hint-blk" style="display:none">
-              <div class="hint-lbl">Indice révélé</div>
-              <div class="hint-txt" id="hint-txt"></div>
-            </div>
-            <button class="btn btn-violet" id="hint-btn">◈ Révéler un indice</button>
-          </div>
-
-          <div class="lsb-zone" id="lsb-zone">
-            <div class="freq-unlock">
-              <div class="freq-unlock-head">✦ Fréquence déverrouillée</div>
-              <div class="freq-unlock-msg">
-                L'énigme est résolue. Les bits de poids faible de cette œuvre cachent un <em>message fréquentiel</em>. Ajustez l'amplitude pour le révéler.
-              </div>
-            </div>
-            <div class="freq-amp-display">
-              <div class="freq-amp-label">Amplitude LSB</div>
-              <div class="freq-amp-value" id="amp-value">0.00</div>
-              <div class="freq-amp-unit">Hz</div>
-            </div>
-            <div class="signal-meter">
-              <div class="signal-meter-head">
-                <span>Signal détecté</span>
-                <span id="signal-pct">0%</span>
-              </div>
-              <div class="signal-bar-track">
-                <div class="signal-bar-fill" id="signal-bar"></div>
-              </div>
-              <div class="signal-dots" id="signal-dots">
-                <div class="signal-dot"></div>
-                <div class="signal-dot"></div>
-                <div class="signal-dot"></div>
-                <div class="signal-dot"></div>
-                <div class="signal-dot"></div>
-              </div>
-              <div class="signal-status" id="signal-status">En attente du signal…</div>
-            </div>
-            <div class="lsb-control">
-              <input type="range" id="lsb-slider" min="0" max="100" value="0" style="width:100%;accent-color:var(--violet);">
-            </div>
-            <div class="solved-banner" id="solved-banner">✦ SIGNAL DÉCODÉ — FRAGMENT RÉVÉLÉ ✦</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div style="height:80px"></div>
-</div>
-
-<script>
-const CHALLENGES = [
-  {
-    num:'01', title:"L'ÉVEIL", sub:'Premier fragment — texte',
-    phase:'enigma',
-    lore:"0x7 a commencé la série Spectre en mars 2023. Ce tableau marque le début d'un projet qu'il nommera <em>Protocole Zéro</em>. Il aurait caché quelque chose dans chaque œuvre depuis le premier jour.",
-    question:"Quelle est la valeur maximale d'un octet en base 10 ?",
-    answer:'255',
-    hint:"Un octet est composé de 8 bits. 2⁸ − 1.",
-    target:42,
-    caption:'spectre-01 · fragment·alpha'
-  },
-  {
-    num:'02', title:'FRÉQUENCE', sub:'Second fragment — onde',
-    phase:'enigma',
-    lore:"La seconde toile fut peinte dans l'obscurité totale. 0x7 affirmait entendre une <em>fréquence</em> que les autres ne percevaient pas. Il l'a encodée dans chaque couche de couleur.",
-    question:"Combien de bits dans un mot de 4 octets ?",
-    answer:'32',
-    hint:"4 × 8 = ?",
-    target:67,
-    caption:'spectre-02 · fragment·bêta'
-  },
-  {
-    num:'03', title:'CRYPTE', sub:'Troisième fragment — silence',
-    phase:'enigma',
-    lore:"Le troisième tableau fut volé puis rendu anonymement. Une note accompagnait le retour : <em>« Le message est dans le bruit. »</em>",
-    question:"Quelle base utilise les chiffres 0 et 1 uniquement ?",
-    answer:'2',
-    hint:"C'est la base du langage machine.",
-    target:81,
-    caption:'spectre-03 · fragment·gamma'
-  },
-  {
-    num:'04', title:'ÉCLIPSE', sub:'Quatrième fragment — ombre',
-    phase:'locked',
-    lore:"Ce tableau n'a jamais été exposé publiquement. Il existe des photos floues, prises en secret lors d'une vente privée.",
-    question:'',answer:'',hint:'',target:0,
-    caption:'spectre-04 · fragment·delta'
-  },
-  {
-    num:'05', title:'RÉSONANCE', sub:'Cinquième fragment — écho',
-    phase:'locked',
-    lore:"La cinquième œuvre fut détruite selon la rumeur — pourtant des fragments persistent dans les archives numériques.",
-    question:'',answer:'',hint:'',target:0,
-    caption:'spectre-05 · fragment·epsilon'
-  },
-  {
-    num:'06', title:'ABÎME', sub:'Sixième fragment — vide',
-    phase:'locked',
-    lore:"0x7 refusa d'exposer cette toile. « Certaines choses ne devraient pas être vues », écrivit-il.",
-    question:'',answer:'',hint:'',target:0,
-    caption:'spectre-06 · fragment·zeta'
-  },
-  {
-    num:'07', title:'SPECTRE', sub:'Fragment final — révélation',
-    phase:'locked',
-    lore:"Le dernier tableau. Personne ne l'a vu entier. On dit qu'il contient les clés de tous les autres.",
-    question:'',answer:'',hint:'',target:0,
-    caption:'spectre-07 · fragment·omega'
-  }
-];
-
-const SOLVED = new Set(JSON.parse(localStorage.getItem('spectre_solved')||'[]'));
-let currentIdx = null;
-let hintUsed = {};
-
-function saveSolved(){localStorage.setItem('spectre_solved',JSON.stringify([...SOLVED]));}
-
-function updateProgress(){
-  const n = SOLVED.size;
-  document.getElementById('prog-count').textContent = n+' / '+CHALLENGES.length;
-  document.getElementById('prog-fill').style.width = (n/CHALLENGES.length*100)+'%';
-  document.getElementById('hdr-solved').textContent = String(n).padStart(2,'0');
-}
-
-function paintThumbCanvas(canvas, idx, solved){
-  const ctx = canvas.getContext('2d');
-  const w = canvas.width = 80, h = canvas.height = 80;
-  const seed = idx * 137;
-  const rng = (n) => Math.abs(Math.sin(seed+n)*10000)%1;
-  ctx.fillStyle = `hsl(${260+rng(0)*60},${solved?60:20}%,${solved?12:6}%)`;
-  ctx.fillRect(0,0,w,h);
-  for(let i=0;i<18;i++){
-    const x=rng(i*3)*w, y=rng(i*3+1)*h, r=rng(i*3+2)*12+2;
-    const g = ctx.createRadialGradient(x,y,0,x,y,r);
-    const hue = solved ? 260+rng(i)*80 : 270+rng(i)*40;
-    const sat = solved ? 70 : 30;
-    g.addColorStop(0,`hsla(${hue},${sat}%,60%,.35)`);
-    g.addColorStop(1,`hsla(${hue},${sat}%,40%,0)`);
-    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
-  }
-}
-
-function paintArtCanvas(canvas, idx){
-  const ctx = canvas.getContext('2d');
-  const w = canvas.width = 400, h = canvas.height = 400;
-  const seed = idx * 137 + 1000;
-  const rng = (n) => Math.abs(Math.sin(seed+n)*10000)%1;
-  const bg = ctx.createRadialGradient(w*.3,h*.4,0,w*.5,h*.5,w*.7);
-  bg.addColorStop(0,`hsl(${250+rng(0)*30},50%,10%)`);
-  bg.addColorStop(1,`hsl(${260+rng(1)*20},30%,3%)`);
-  ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
-  for(let i=0;i<40;i++){
-    const x=rng(i*5)*w, y=rng(i*5+1)*h;
-    const r=rng(i*5+2)*60+5;
-    const hue=250+rng(i*5+3)*80;
-    const g=ctx.createRadialGradient(x,y,0,x,y,r);
-    g.addColorStop(0,`hsla(${hue},70%,60%,${rng(i*5+4)*.25+.05})`);
-    g.addColorStop(1,`hsla(${hue},60%,40%,0)`);
-    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
-  }
-  for(let i=0;i<120;i++){
-    const x=rng(i*7)*w, y=rng(i*7+1)*h;
-    const a=rng(i*7+2)*.6+.1;
-    ctx.fillStyle=`rgba(255,255,255,${a*.4})`;
-    ctx.fillRect(x,y,rng(i*7+3)*2+.5,rng(i*7+4)*2+.5);
-  }
-}
-
-function buildGrid(){
-  const grid = document.getElementById('serie-grid');
-  grid.innerHTML='';
-  CHALLENGES.forEach((ch,i)=>{
-    const solved = SOLVED.has(i);
-    const locked = ch.phase==='locked' && !solved;
-    const div = document.createElement('div');
-    div.className = 'spectre-thumb'+(locked?' locked':solved?' solved enigma-phase':' enigma-phase');
-    div.dataset.idx = i;
-    if(currentIdx===i) div.classList.add('active-tab');
-    const c = document.createElement('canvas');
-    paintThumbCanvas(c,i,solved);
-    const ov = document.createElement('div'); ov.className='t-overlay';
-    const num = document.createElement('div'); num.className='t-num'; num.textContent=ch.num;
-    const stat = document.createElement('div'); stat.className='t-stat';
-    stat.textContent = locked ? '🔒 verrouillé' : solved ? '✦ résolu' : 'explorer';
-    ov.appendChild(num); ov.appendChild(stat);
-    div.appendChild(c); div.appendChild(ov);
-    if(!locked) div.addEventListener('click',()=>openChallenge(i));
-    grid.appendChild(div);
-  });
-}
-
-function openChallenge(idx){
-  currentIdx = idx;
-  const ch = CHALLENGES[idx];
-  const solved = SOLVED.has(idx);
-  buildGrid();
-  const panel = document.getElementById('ch-panel');
-  panel.classList.add('visible');
-  panel.scrollIntoView({behavior:'smooth',block:'start'});
-
-  document.getElementById('ch-num').textContent = ch.num;
-  document.getElementById('ch-title').textContent = ch.title;
-  document.getElementById('ch-sub').textContent = ch.sub;
-  document.getElementById('lore-txt').innerHTML = ch.lore;
-  document.getElementById('art-caption').textContent = ch.caption;
-  document.getElementById('enigma-input').value='';
-  document.getElementById('enigma-feedback').textContent='';
-  document.getElementById('hint-blk').style.display='none';
-
-  const card = document.getElementById('ch-card');
-  card.className='ch-card '+(solved?'solved-card enigma-card':'enigma-card');
-
-  const badge = document.getElementById('ch-badge');
-
-  const enigmaZone = document.getElementById('enigma-zone');
-  const lsbZone = document.getElementById('lsb-zone');
-
-  if(solved){
-    badge.className='ch-badge done-b'; badge.textContent='Résolu';
-    enigmaZone.classList.remove('visible');
-    lsbZone.classList.add('visible');
-    document.getElementById('solved-banner').classList.add('visible');
-    setupSlider(idx, true);
-  } else {
-    badge.className='ch-badge enigma-b'; badge.textContent='Énigme';
-    enigmaZone.classList.add('visible');
-    lsbZone.classList.remove('visible');
-    document.getElementById('solved-banner').classList.remove('visible');
-    document.getElementById('enigma-q').textContent = ch.question;
-    setupEnigma(idx);
-  }
-
-  paintArtCanvas(document.getElementById('art-canvas'), idx);
-}
-
-function setupEnigma(idx){
-  const ch = CHALLENGES[idx];
-  const submitBtn = document.getElementById('enigma-submit');
-  const inp = document.getElementById('enigma-input');
-  const fb = document.getElementById('enigma-feedback');
-
-  const handler = ()=>{
-    const val = inp.value.trim().toLowerCase();
-    const ans = ch.answer.toLowerCase();
-    if(val===ans){
-      fb.className='enigma-feedback ok'; fb.textContent='✦ Correct — fréquence déverrouillée';
-      SOLVED.add(idx); saveSolved(); updateProgress();
-      setTimeout(()=>openChallenge(idx),900);
-    } else {
-      fb.className='enigma-feedback err'; fb.textContent='✗ Réponse incorrecte';
-      inp.style.borderColor='#ff5f56';
-      setTimeout(()=>inp.style.borderColor='',800);
-    }
-  };
-
-  submitBtn.onclick = handler;
-  inp.onkeydown = e => { if(e.key==='Enter') handler(); };
-
-  document.getElementById('hint-btn').onclick = ()=>{
-    hintUsed[idx]=true;
-    document.getElementById('hint-txt').textContent = ch.hint;
-    document.getElementById('hint-blk').style.display='block';
-  };
-}
-
-function setupSlider(idx, alreadySolved){
-  const ch = CHALLENGES[idx];
-  const slider = document.getElementById('lsb-slider');
-  const ampVal = document.getElementById('amp-value');
-  const sigBar = document.getElementById('signal-bar');
-  const sigPct = document.getElementById('signal-pct');
-  const sigStatus = document.getElementById('signal-status');
-  const sigDots = document.getElementById('signal-dots').querySelectorAll('.signal-dot');
-  const banner = document.getElementById('solved-banner');
-
-  slider.value = alreadySolved ? ch.target : 0;
-
-  const update = ()=>{
-    const v = parseInt(slider.value);
-    const t = ch.target;
-    const dist = Math.abs(v-t);
-    const prox = Math.max(0,1-dist/50);
-    const pct = Math.round(prox*100);
-
-    ampVal.textContent = (v/10).toFixed(2);
-    sigBar.style.width = pct+'%';
-    sigPct.textContent = pct+'%';
-
-    if(prox>0){
-      const hue = prox>=1?120:(prox>.6?50:280);
-      sigBar.style.background = `hsl(${hue},70%,50%)`;
-    } else {
-      sigBar.style.background='var(--border)';
-    }
-
-    const dotsOn = Math.round(prox*5);
-    sigDots.forEach((d,i)=>d.classList.toggle('active',i<dotsOn));
-
-    if(dist===0){
-      sigStatus.style.color='var(--green)'; sigStatus.textContent='✦ Signal exact — décodage en cours…';
-      banner.classList.add('visible');
-      if(!alreadySolved){
-        alreadySolved=true;
-        const frame = document.getElementById('art-frame');
-        SpectreWaveReveal.play(frame);
-      }
-    } else if(prox>.6){
-      sigStatus.style.color='var(--gold)'; sigStatus.textContent='Signal chaud — continuez…';
-    } else if(prox>.2){
-      sigStatus.style.color='var(--violet)'; sigStatus.textContent='Signal faible détecté';
-    } else {
-      sigStatus.style.color='var(--dim)'; sigStatus.textContent='En attente du signal…';
-    }
-  };
-
-  slider.oninput = update;
-  update();
-}
-
-const SpectreWaveReveal = (()=>{
-  function play(artFrame){
-    const srcCanvas = artFrame.querySelector('.art-canvas');
-    if(!srcCanvas || artFrame.querySelector('.wave-reveal-canvas')) return;
-    const W = srcCanvas.offsetWidth||srcCanvas.width;
-    const H = srcCanvas.offsetHeight||srcCanvas.height;
-    const wc = document.createElement('canvas');
-    wc.className='wave-reveal-canvas'; wc.width=W; wc.height=H;
-    artFrame.style.position='relative';
-    artFrame.appendChild(wc);
-    const ctx = wc.getContext('2d');
-    const img = new Image();
-    img.onload = ()=>startAnim(img);
-    try { img.src = srcCanvas.toDataURL(); } catch(e){ startAnim(null); }
-
-    function startAnim(source){
-      const DURATION=2800, CHAOS_END=600, WAVE_END=2200;
-      const start = performance.now();
-      let raf;
-      function ease(t){ return 1-Math.pow(1-t,3); }
-      function draw(now){
-        const elapsed = now-start;
-        const progress = Math.min(elapsed/DURATION,1);
-        let amp;
-        if(elapsed<CHAOS_END) amp=ease(elapsed/CHAOS_END);
-        else if(elapsed<WAVE_END) amp=1-ease((elapsed-CHAOS_END)/(WAVE_END-CHAOS_END));
-        else amp=0;
-        const t=elapsed/1000;
-        const maxDisp=amp*18;
-        ctx.clearRect(0,0,W,H);
-        const step=2;
-        for(let y=0;y<H;y+=step){
-          const wave=Math.sin(y*.04+t*2.2)*maxDisp+Math.sin(y*.07+t*3.1)*(maxDisp*.4);
-          if(source) ctx.drawImage(source,0,y,W,step,wave,y,W,step);
-          else { ctx.fillStyle=`hsla(${(y*.8+t*60)%360},70%,50%,.4)`; ctx.fillRect(wave,y,W,step); }
-        }
-        if(amp>0.01){
-          const vg=ctx.createRadialGradient(W/2,H/2,H*.1,W/2,H/2,H*.75);
-          vg.addColorStop(0,`rgba(2,1,10,0)`); vg.addColorStop(1,`rgba(2,1,10,${amp*.5})`);
-          ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
-          ctx.fillStyle=`rgba(168,85,247,${amp*.04})`;
-          for(let sy=0;sy<H;sy+=4) ctx.fillRect(0,sy,W,1);
-        }
-        if(elapsed>=WAVE_END) wc.style.opacity=String(1-ease((elapsed-WAVE_END)/(DURATION-WAVE_END)));
-        if(progress<1){ raf=requestAnimationFrame(draw); }
-        else { cancelAnimationFrame(raf); wc.remove(); flashReveal(artFrame); }
-      }
-      raf=requestAnimationFrame(draw);
-    }
-  }
-  function flashReveal(artFrame){
-    const flash=document.createElement('div');
-    flash.style.cssText='position:absolute;inset:0;z-index:20;border-radius:2px;background:rgba(34,197,94,0.18);pointer-events:none;animation:waveFlash .5s ease forwards;';
-    artFrame.appendChild(flash);
-    setTimeout(()=>flash.remove(),600);
-  }
-  return {play};
-})();
-
-setTimeout(()=>{
-  document.getElementById('loader').classList.add('hidden');
-  document.getElementById('site').classList.add('visible');
-  buildGrid();
-  updateProgress();
-},2800);
-</script>
 </body>
 </html>
