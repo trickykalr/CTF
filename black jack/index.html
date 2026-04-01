@@ -83,7 +83,6 @@
 
   .join-error { color: #e74c3c; font-size: 0.9rem; text-align: center; margin-top: 10px; font-style: italic; min-height: 20px; }
 
-  /* Code room banner */
   #roomCodeBanner {
     display: none; margin-top: 20px; text-align: center;
     background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3);
@@ -102,7 +101,8 @@
     border-radius: 20px; padding: 40px; width: 100%; max-width: 500px;
   }
   .lobby-waiting h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); text-align: center; margin-bottom: 24px; }
-  #lobbyPlayersList { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+  #lobbyPlayersList { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
   .lobby-player {
     display: flex; align-items: center; gap: 12px;
     background: rgba(0,0,0,0.2); border: 1px solid rgba(201,168,76,0.15);
@@ -114,17 +114,44 @@
   .lp-name em { color: var(--gold-dark); }
   .lp-balance { font-size: 0.85rem; color: var(--gold-dark); }
 
+  /* ── Boutons du lobby ── */
+  .lobby-btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
   #btnStart {
-    display: none; width: 100%;
+    width: 100%;
     background: linear-gradient(135deg, var(--gold-dark), var(--gold));
     border: none; border-radius: 10px; padding: 13px 24px;
     color: var(--felt-dark); font-family: 'Playfair Display', serif;
     font-size: 1.1rem; font-weight: 700; cursor: pointer; letter-spacing: 0.08em;
     transition: all 0.25s; box-shadow: 0 4px 15px rgba(201,168,76,0.3);
   }
-  #btnStart:hover { transform: translateY(-2px); }
+  #btnStart:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,168,76,0.4); }
+  #btnStart:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-  .waiting-msg { text-align: center; color: var(--gold-dark); font-style: italic; font-size: 0.95rem; }
+  #btnLeaveRoom {
+    width: 100%;
+    background: none;
+    border: 1px solid rgba(192,57,43,0.45);
+    border-radius: 10px; padding: 12px 24px;
+    color: #e07070; font-family: 'Playfair Display', serif;
+    font-size: 1rem; cursor: pointer; letter-spacing: 0.06em;
+    transition: all 0.25s;
+  }
+  #btnLeaveRoom:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+    background: rgba(192,57,43,0.08);
+  }
+
+  .waiting-msg {
+    text-align: center; color: var(--gold-dark); font-style: italic;
+    font-size: 0.95rem; margin-bottom: 4px;
+  }
 
   /* ── GAME ────────────────────────────────────────────────── */
   #screenGame { display: none; min-height: 100vh; padding: 20px; }
@@ -143,7 +170,6 @@
     font-style: italic; min-height: 28px;
   }
 
-  /* Dealer zone */
   .dealer-zone {
     background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,76,0.15);
     border-radius: 16px; padding: 24px; margin-bottom: 24px; text-align: center;
@@ -151,7 +177,6 @@
   .zone-label { font-family: 'Playfair Display', serif; font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 12px; }
   .dealer-name { font-size: 1.3rem; color: var(--gold); margin-bottom: 16px; font-style: italic; }
 
-  /* Cards */
   .hand { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; min-height: 120px; align-items: center; }
   .card {
     width: 70px; height: 100px; border-radius: 8px; background: white;
@@ -185,7 +210,6 @@
   }
   .btn-dealer:hover { background: rgba(201,168,76,0.2); }
 
-  /* Players zone */
   .players-zone { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
   .player-card {
     background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,76,0.15);
@@ -203,7 +227,6 @@
   .bust-badge  { background: #e74c3c !important; color: white !important; }
   .stand-badge { background: #2980b9 !important; color: white !important; }
 
-  /* Bet */
   .bet-section { margin-bottom: 14px; }
   .bet-label { font-size: 0.8rem; color: rgba(245,239,224,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
   .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
@@ -226,7 +249,6 @@
   }
   .btn-clear-bet:hover { background: rgba(192,57,43,0.15); }
 
-  /* Actions joueur */
   .player-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
   .btn-action {
     border: none; border-radius: 8px; padding: 8px 16px; cursor: pointer;
@@ -344,10 +366,7 @@
         </div>
       </div>
 
-      <div class="field" id="codeField" style="display:none">
-        <label>Code de la room</label>
-        <input id="inputCode" type="text" placeholder="EX: AB12C" maxlength="5" style="text-transform:uppercase;letter-spacing:0.2em">
-      </div>
+      <div id="roomList" style="display:none;margin-bottom:12px"></div>
 
       <button type="submit" class="btn-primary">Entrer ♠</button>
     </form>
@@ -370,11 +389,39 @@
 
   <div class="lobby-waiting">
     <h2>Salle d'attente</h2>
+
+    <!-- Liste des joueurs (remplie par ui.js → renderLobby) -->
     <ul id="lobbyPlayersList"></ul>
-    <button id="btnStart">Démarrer la partie ♠</button>
-    <p class="waiting-msg" id="waitingMsg" style="margin-top:14px">
+
+    <!-- Zone hôte : bouton bot + inviter (injectée par ui.js → renderLobby) -->
+
+    <!-- Message d'attente pour les non-hôtes -->
+    <p class="waiting-msg" id="waitingMsg">
       En attente du croupier pour démarrer…
     </p>
+
+    <!-- ── Les 2 boutons principaux du lobby ── -->
+    <div class="lobby-btn-group">
+
+      <!--
+        Bouton 1 : Lancer la partie
+        • Affiché uniquement pour le croupier / l'hôte (géré par ui.js → renderLobby)
+        • Le clic est écouté dans client.js via getElementById('btnStart')
+      -->
+      <button id="btnStart" style="display:none">
+        ▶ Lancer la partie
+      </button>
+
+      <!--
+        Bouton 2 : Quitter le salon
+        • Toujours visible pour tous les joueurs dans le lobby
+        • Appelle gameActions.leaveRoom() défini dans client.js
+      -->
+      <button id="btnLeaveRoom" onclick="window.gameActions.leaveRoom()">
+        ↩ Quitter le salon
+      </button>
+
+    </div>
   </div>
 </div>
 
@@ -382,7 +429,7 @@
 <div id="screenGame">
   <div class="game-header">
     <div class="game-title">♠ Black Jack — Casino Royal</div>
-    <button class="btn-quit" onclick="window.gameActions.backToLobby()">↩ Quitter</button>
+    <button class="btn-quit" onclick="window.gameActions.leaveRoom()">↩ Quitter</button>
   </div>
 
   <div class="phase-banner" id="phaseBanner"></div>
@@ -414,7 +461,7 @@
     <button class="btn-new-round" id="btnNewRound" onclick="window.gameActions.newRound()">
       Nouvelle Manche ♠
     </button>
-    <button class="btn-back-lobby" onclick="window.gameActions.backToLobby()">
+    <button class="btn-back-lobby" onclick="window.gameActions.leaveRoom()">
       Changer de table
     </button>
   </div>
@@ -424,8 +471,8 @@
 <div class="msg-toast" id="toast"></div>
 
 <!-- Scripts : ordre important -->
-<script src="/socket.io/socket.io.js"></script>  <!-- fourni par le serveur -->
+<script src="/socket.io/socket.io.js"></script>  <!-- fourni par le serveur Node -->
 <script src="ui.js"></script>                     <!-- rendu DOM -->
-<script src="clients.js"></script>                 <!-- socket + actions -->
+<script src="client.js"></script>                 <!-- socket + actions -->
 </body>
 </html>
