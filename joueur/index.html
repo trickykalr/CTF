@@ -462,6 +462,8 @@
   </div>
 
   <div class="phase-banner" id="phaseBanner"></div>
+  <div id="betTimer" style="display:none;justify-content:center;align-items:center;
+  position:relative;margin-bottom:6px"></div>
 
   <div class="dealer-zone">
     <div class="zone-label">♦ Croupier ♦</div>
@@ -470,7 +472,7 @@
     <div class="hand-value" id="dealerValue"></div>
     <div class="dealer-actions" id="dealerActions"></div>
   </div>
-
+  
   <div class="players-zone" id="playersZone"></div>
 </div>
 
@@ -479,6 +481,8 @@
   <button class="ab-btn ab-hit"    onclick="window.gameActions.hit()">🃏 Tirer</button>
   <button class="ab-btn ab-stand"  onclick="window.gameActions.stand()">✋ Rester</button>
   <button class="ab-btn ab-double" id="abDouble" onclick="window.gameActions.double()" style="display:none">✖2 Double</button>
+  <button class="ab-btn" id="abSplit" onclick="window.gameActions.split()"
+  style="display:none;background:linear-gradient(135deg,#8e44ad,#6c3483);color:white">✂ Split</button>
 </div>
 
 <!-- ══════════ ÉCRAN 3 : RÉSULTATS ══════════ -->
@@ -489,6 +493,7 @@
   <div class="divider"><span>♦</span></div>
   <div style="text-align:center;font-size:.92rem;color:var(--gold-dark);margin-bottom:20px;padding:0 14px">
     Score Croupier : <span id="dealerFinalScore" style="color:var(--cream)"></span>
+    <div id="dealerBalance" style="font-size:.82rem;color:var(--gold-dark);margin-top:4px"></div>
   </div>
   <div class="results-acts">
     <button class="btn-new-round" id="btnNewRound" onclick="window.gameActions.newRound()">Nouvelle Manche ♠</button>
