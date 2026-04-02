@@ -1,194 +1,104 @@
 // ═══════════════════════════════════════════════════════════
-//  clients.js — Pont entre Socket.io et l'interface visuelle
+//  client.js
 // ═══════════════════════════════════════════════════════════
 
 const socket = io();
-let mySocketId   = null;
-let currentState = null;
+let mySocketId = null, currentState = null;
 
-// ── Connexion ─────────────────────────────────────────────────
 socket.on('connect', () => {
   mySocketId = socket.id;
-  console.log('Connecté :', mySocketId);
-
-  // Invitation via URL ?code=XXXXX
-  const params     = new URLSearchParams(window.location.search);
-  const inviteCode = params.get('code');
-  if (inviteCode) {
+  const code = new URLSearchParams(location.search).get('code');
+  if (code) {
     document.querySelector('[name=action][value=join]').checked = true;
-    window._selectedRoom = inviteCode.toUpperCase();
-    const errEl = document.getElementById('joinError');
-    if (errEl) {
-      errEl.style.color = 'var(--gold)';
-      errEl.textContent = `Invitation : salle ${inviteCode.toUpperCase()} — Entrez votre nom et cliquez Entrer`;
-    }
-    socket.emit('getRooms', null, ({ rooms }) => UI.renderRoomList(rooms));
+    window._selectedRoom = code.toUpperCase();
+    const e = document.getElementById('joinError');
+    if (e) { e.style.color='var(--gold)'; e.textContent=`Invitation : salle ${code.toUpperCase()} — Entrez votre nom`; }
+    socket.emit('getRooms', null, ({rooms})=>UI.renderRoomList(rooms));
   }
 });
 
-// ── État ──────────────────────────────────────────────────────
-socket.on('state', (state) => {
-  currentState = state;
-  syncScreens(state);
-});
-
+socket.on('state', state => { currentState = state; syncScreens(state); });
 socket.on('toast', msg => UI.showToast(msg));
-
-socket.on('kicked', ({ reason }) => {
-  UI.showToast(reason || 'Vous avez été expulsé');
+socket.on('blackjack', ({name}) => UI.showBlackjackCelebration(name));
+socket.on('kicked', ({reason}) => {
+  UI.showToast(reason||'Vous avez été expulsé');
   setTimeout(() => {
-    ['screenLobby', 'screenGame'].forEach(id =>
-      document.getElementById(id).style.display = 'none'
-    );
-    document.getElementById('screenJoin').style.display = 'flex';
+    ['screenLobby','screenGame','screenResults'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+    document.getElementById('screenJoin').style.display='flex';
     currentState = null;
   }, 1500);
 });
 
-// ── Écrans ────────────────────────────────────────────────────
 function syncScreens(state) {
   document.getElementById('screenJoin').style.display = 'none';
-
-  const screens = {
-    lobby:   document.getElementById('screenLobby'),
-    game:    document.getElementById('screenGame'),
-    results: document.getElementById('screenResults'),
-  };
-  Object.values(screens).forEach(s => s && (s.style.display = 'none'));
+  ['screenLobby','screenGame','screenResults'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+  document.getElementById('actionBar').classList.remove('show');
 
   if (state.phase === 'lobby') {
-    screens.lobby.style.display = 'flex';
+    document.getElementById('screenLobby').style.display = 'flex';
     UI.renderLobby(state, mySocketId);
-    return;
-  }
-  if (state.phase === 'results') {
-    screens.results.style.display = 'block';
+  } else if (state.phase === 'results') {
+    document.getElementById('screenResults').style.display = 'block';
     UI.renderResults(state, mySocketId);
-    return;
+  } else {
+    document.getElementById('screenGame').style.display = 'block';
+    UI.renderAll(state, mySocketId);
   }
-  screens.game.style.display = 'block';
-  UI.renderAll(state, mySocketId);
 }
 
-// ── Actions ───────────────────────────────────────────────────
 window.gameActions = {
-
-  placeBet(amount) {
-    socket.emit('placeBet', { amount }, res => {
-      if (!res?.ok) UI.showToast(res?.error || 'Erreur mise');
-    });
-  },
-
-  clearBet() { socket.emit('clearBet'); },
-
-  dealCards() {
-    socket.emit('dealCards', null, res => {
-      if (!res?.ok) UI.showToast(res?.error || 'Impossible de distribuer');
-    });
-  },
-
-  dealerReveal() {
-    socket.emit('dealerReveal', null, res => {
-      if (!res?.ok) UI.showToast(res?.error || 'Erreur révélation');
-    });
-  },
-
-  hit()    { socket.emit('hit',   null, res => { if (!res?.ok) UI.showToast(res?.error || 'Erreur'); }); },
-  stand()  { socket.emit('stand', null, res => { if (!res?.ok) UI.showToast(res?.error || 'Erreur'); }); },
-  double() { socket.emit('double',null, res => { if (!res?.ok) UI.showToast(res?.error || 'Erreur double'); }); },
-
-  newRound() {
-    socket.emit('newRound', null, res => {
-      if (!res?.ok) UI.showToast(res?.error || 'Erreur');
-    });
-  },
-
-  leaveRoom() {
+  placeBet(a)  { socket.emit('placeBet',  {amount:a}, r => { if(!r?.ok) UI.showToast(r?.error||'Erreur mise'); }); },
+  clearBet()   { socket.emit('clearBet'); },
+  dealCards()  { socket.emit('dealCards', null, r => { if(!r?.ok) UI.showToast(r?.error||'Impossible de distribuer'); }); },
+  dealerReveal(){ socket.emit('dealerReveal', null, r => { if(!r?.ok) UI.showToast(r?.error||'Erreur'); }); },
+  hit()        { socket.emit('hit',    null, r => { if(!r?.ok) UI.showToast(r?.error||'Erreur'); }); },
+  stand()      { socket.emit('stand',  null, r => { if(!r?.ok) UI.showToast(r?.error||'Erreur'); }); },
+  double()     { socket.emit('double', null, r => { if(!r?.ok) UI.showToast(r?.error||'Erreur'); }); },
+  newRound()   { socket.emit('newRound', null, r => { if(!r?.ok) UI.showToast(r?.error||'Erreur'); }); },
+  addBot()     { socket.emit('addBot',  null, r => { if(!r?.ok) UI.showToast(r?.error||'Impossible'); }); },
+  removeBot(id){ socket.emit('removeBot',{botSocketId:id}, r => { if(!r?.ok) UI.showToast(r?.error||'Erreur'); }); },
+  kickPlayer(id){ socket.emit('kickPlayer',{targetSocketId:id}, r => { if(!r?.ok) UI.showToast(r?.error||'Impossible'); }); },
+  showInvite() { socket.emit('getInviteCode', null, r => { if(r?.ok) UI.showInviteModal(r.code); }); },
+  leaveRoom()  {
     socket.emit('leaveRoom', null, () => {
-      ['screenLobby', 'screenGame'].forEach(id =>
-        document.getElementById(id).style.display = 'none'
-      );
+      ['screenLobby','screenGame','screenResults'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
       document.getElementById('screenJoin').style.display = 'flex';
-      window._selectedRoom = null;
-      currentState = null;
-      window.history.replaceState({}, '', '/');
+      document.getElementById('actionBar').classList.remove('show');
+      window._selectedRoom = null; currentState = null;
+      history.replaceState({}, '', '/');
     });
   },
-
-  kickPlayer(targetSocketId) {
-    socket.emit('kickPlayer', { targetSocketId }, res => {
-      if (!res?.ok) UI.showToast(res?.error || 'Impossible d\'expulser');
-    });
-  },
-
-  addBot() {
-    socket.emit('addBot', null, res => {
-      if (!res?.ok) UI.showToast(res?.error || 'Impossible d\'ajouter un bot');
-    });
-  },
-
-  removeBot(botSocketId) {
-    socket.emit('removeBot', { botSocketId }, res => {
-      if (!res?.ok) UI.showToast(res?.error || 'Erreur');
-    });
-  },
-
-  showInvite() {
-    socket.emit('getInviteCode', null, res => {
-      if (res?.ok) UI.showInviteModal(res.code);
-    });
-  },
-
-  backToLobby() { window.location.reload(); },
 };
 
-// ── Formulaire accueil ────────────────────────────────────────
 document.getElementById('formJoin')?.addEventListener('submit', e => {
   e.preventDefault();
   const name   = document.getElementById('inputName').value.trim();
   const role   = document.getElementById('selectRole').value;
   const action = document.querySelector('[name=action]:checked')?.value || 'create';
-  const errEl  = document.getElementById('joinError');
-
-  if (!name) { errEl.textContent = 'Entrez votre nom.'; return; }
-  errEl.textContent = '';
-  errEl.style.color = '#e74c3c';
+  const err    = document.getElementById('joinError');
+  if (!name) { err.textContent='Entrez votre nom.'; return; }
+  err.textContent = ''; err.style.color = '#e74c3c';
 
   if (action === 'create') {
-    socket.emit('createRoom', { name, role }, res => {
-      if (!res.ok) { errEl.textContent = res.error; return; }
+    socket.emit('createRoom', {name,role}, res => {
+      if (!res.ok) { err.textContent=res.error; return; }
       document.getElementById('roomCodeDisplay').textContent = res.code;
       document.getElementById('roomCodeBanner').style.display = '';
     });
   } else {
     const code = window._selectedRoom;
-    if (!code) { errEl.textContent = 'Sélectionnez une salle dans la liste.'; return; }
-    socket.emit('joinRoom', { code, name, role }, res => {
-      if (!res.ok) { errEl.textContent = res.error; return; }
-    });
+    if (!code) { err.textContent='Sélectionnez une salle dans la liste.'; return; }
+    socket.emit('joinRoom', {code,name,role}, res => { if(!res.ok) err.textContent=res.error; });
   }
 });
 
-// ── Toggle rejoindre → charger les rooms ──────────────────────
-document.querySelectorAll('[name=action]').forEach(radio => {
-  radio.addEventListener('change', () => {
-    const isJoin    = radio.value === 'join';
-    const codeField = document.getElementById('codeField');
-    if (codeField) codeField.style.display = 'none';
-
-    if (isJoin) {
-      socket.emit('getRooms', null, ({ rooms }) => UI.renderRoomList(rooms));
-    } else {
-      const roomList = document.getElementById('roomList');
-      if (roomList) roomList.style.display = 'none';
-      window._selectedRoom = null;
-    }
+document.querySelectorAll('[name=action]').forEach(r => {
+  r.addEventListener('change', () => {
+    if (r.value==='join') socket.emit('getRooms', null, ({rooms})=>UI.renderRoomList(rooms));
+    else { const el=document.getElementById('roomList'); if(el) el.style.display='none'; window._selectedRoom=null; }
   });
 });
 
-// ── Bouton démarrer ───────────────────────────────────────────
 document.getElementById('btnStart')?.addEventListener('click', () => {
-  socket.emit('startGame', null, res => {
-    if (!res?.ok) UI.showToast(res?.error || 'Impossible de démarrer');
-  });
+  socket.emit('startGame', null, r => { if(!r?.ok) UI.showToast(r?.error||'Impossible de démarrer'); });
 });
