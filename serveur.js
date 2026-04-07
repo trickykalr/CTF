@@ -28,7 +28,6 @@ function makePlayer(socketId, name, role) {
     balance: 1000, bet: 0, hand: [],
     stood: false, busted: false, doubled: false,
     result: null, gain: null, isBot: false, ready: false,
-    // Split
     isSplit: false, splitHand: [], splitBet: 0,
     splitStood: false, splitBusted: false, playingSplit: false,
     splitResult: null, splitGain: null,
@@ -144,7 +143,6 @@ function startBetTimer(room, seconds = 45) {
   room.betTimerEnd = Date.now() + seconds * 1000;
   room._betTimer = setTimeout(() => {
     if (room.phase !== 'betting') return;
-    // Mise minimum forcée pour les joueurs qui n'ont pas misé
     let changed = false;
     room.players.forEach(p => {
       if (p.role === 'player' && !p.isBot && p.bet === 0 && p.balance > 0) {
@@ -169,8 +167,7 @@ function initRound(room) {
     p.hand = []; p.bet = 0;
     p.stood = false; p.busted = false; p.doubled = false;
     p.result = null; p.gain = null;
-    p.ready = p.isBot; // bots toujours prêts
-    // Reset split
+    p.ready = p.isBot;
     p.isSplit = false; p.splitHand = []; p.splitBet = 0;
     p.splitStood = false; p.splitBusted = false; p.playingSplit = false;
     p.splitResult = null; p.splitGain = null;
@@ -179,7 +176,6 @@ function initRound(room) {
 
   const humanPlayers = room.players.filter(p => p.role === 'player' && !p.isBot);
   if (humanPlayers.length === 0) {
-    // FIX : que des bots comme joueurs → chrono 3s puis auto-deal
     room.betTimerEnd = Date.now() + 3000;
     if (room._betTimer) clearTimeout(room._betTimer);
     room._betTimer = setTimeout(() => {
@@ -196,7 +192,6 @@ function initRound(room) {
 function advanceTurn(room) {
   const curP = room.players[room.currentPlayerIdx];
 
-  // Si le joueur courant a un split hand non encore joué
   if (curP && curP.isSplit && !curP.playingSplit && !curP.splitStood && !curP.splitBusted) {
     curP.playingSplit = true;
     io.to(room.code).emit('toast', `${curP.name} — 2ème main`);
@@ -284,35 +279,28 @@ function dealCardsForRoom(room) {
   if (room.phase !== 'betting') return;
   if (room._betTimer) { clearTimeout(room._betTimer); room._betTimer = null; }
 
-  // Déduire mises joueurs ET croupier
   room.players.forEach(p => {
     if ((p.role === 'player' || p.role === 'dealer') && p.bet > 0) {
       p.balance -= p.bet;
     }
   });
 
-  // Distribuer 2 cartes à tout le monde
   room.players.forEach(p => {
     p.hand.push({ ...drawCard(room.deck), hidden: false });
     p.hand.push({ ...drawCard(room.deck), hidden: false });
   });
   room.players[room.dealerIdx].hand[1].hidden = true;
 
-  // Blackjacks immédiats
-  // FIX : on n'émet l'overlay qu'au joueur concerné, pas à toute la room
-  // (sinon l'overlay bloque les autres joueurs qui doivent encore jouer)
   const blackjackNames = [];
   room.players.forEach(p => {
     if (p.role === 'player' && isBlackjack(p.hand)) {
       p.stood = true;
       blackjackNames.push(p.name);
       if (!p.isBot) {
-        // Seulement pour ce joueur
         io.to(p.socketId).emit('blackjack', { name: p.name });
       }
     }
   });
-  // Toast global pour informer tout le monde
   if (blackjackNames.length > 0) {
     setTimeout(() => {
       io.to(room.code).emit('toast', `♠ Blackjack : ${blackjackNames.join(', ')} !`);
@@ -325,13 +313,12 @@ function dealCardsForRoom(room) {
   if (room.currentPlayerIdx === -1) {
     room.phase = 'dealer';
     if (blackjackNames.length > 0) {
-      // Laisser le temps à l'overlay de s'afficher avant le tour croupier
       setTimeout(() => {
         io.to(room.code).emit('toast', 'Tour du croupier !');
         autoDealerRevealIfBot(room);
         broadcastState(room.code);
       }, 1500);
-      broadcastState(room.code); // premier broadcast pour afficher les cartes
+      broadcastState(room.code);
       return;
     }
     io.to(room.code).emit('toast', 'Tour du croupier !');
@@ -359,12 +346,10 @@ function computeResultsWithSplit(room) {
   const updated = room.players.map(p => {
     if (p.role === 'dealer') return p;
 
-    // Main hand
     const { result, gain } = resolvePlayer(p, dealer.hand);
     let newBalance = p.balance + (result === 'lose' ? 0 : p.bet + gain);
     dealerDelta += result === 'lose' ? p.bet : result === 'win' ? -gain : 0;
 
-    // Split hand
     let splitResult = null, splitGain = null;
     if (p.isSplit && p.splitHand.length > 0) {
       const fakeP = { hand: p.splitHand, busted: p.splitBusted, bet: p.splitBet };
@@ -378,7 +363,6 @@ function computeResultsWithSplit(room) {
     return { ...p, result, gain, splitResult, splitGain, balance: newBalance };
   });
 
-  // Mettre à jour la balance du croupier
   const dIdx = updated.findIndex(p => p.role === 'dealer');
   if (dIdx >= 0) {
     updated[dIdx] = { ...updated[dIdx], balance: updated[dIdx].balance + dealerDelta };
@@ -386,7 +370,9 @@ function computeResultsWithSplit(room) {
   return updated;
 }
 
-// ── Vérifier si tous les humains sont prêts ───────────────────
+// ── FIX : Vérifier si tous les humains sont prêts ─────────────
+// BUG CORRIGÉ : quand allPlayersReady et croupier est un bot,
+// lancer la distribution automatiquement (sinon la partie était bloquée)
 function checkAllReady(room) {
   const humans = room.players.filter(p => p.role === 'player' && !p.isBot);
   if (humans.length === 0) return;
@@ -395,6 +381,14 @@ function checkAllReady(room) {
     room.allPlayersReady = true;
     io.to(room.code).emit('toast', '✓ Tous les joueurs sont prêts !');
     broadcastState(room.code);
+
+    // ← FIX : si le croupier est un bot, pas besoin d'attendre qu'il clique
+    const dealer = room.players[room.dealerIdx];
+    if (dealer?.isBot) {
+      setTimeout(() => {
+        if (room.phase === 'betting') dealCardsForRoom(room);
+      }, 1200);
+    }
   }
 }
 
@@ -404,7 +398,6 @@ function checkAllReady(room) {
 io.on('connection', (socket) => {
   console.log(`[+] ${socket.id}`);
 
-  // ── Créer une room ──────────────────────────────────────────
   socket.on('createRoom', ({ name, role }, cb) => {
     const code = generateCode();
     rooms[code] = createRoom(code);
@@ -418,14 +411,13 @@ io.on('connection', (socket) => {
     broadcastState(code);
   });
 
-  // ── Rejoindre ───────────────────────────────────────────────
   socket.on('joinRoom', ({ code, name, role }, cb) => {
     const room = rooms[code];
     if (!room)                  return cb({ ok: false, error: 'Room introuvable.' });
     if (room.phase !== 'lobby') return cb({ ok: false, error: 'Partie déjà commencée.' });
     const hasDealer   = room.players.some(p => p.role === 'dealer');
     const playerCount = room.players.filter(p => p.role === 'player' && !p.isBot).length;
-    if (role === 'dealer' && hasDealer)     return cb({ ok: false, error: 'Il y a déjà un croupier.' });
+    if (role === 'dealer' && hasDealer)        return cb({ ok: false, error: 'Il y a déjà un croupier.' });
     if (role === 'player' && playerCount >= 4) return cb({ ok: false, error: 'Room pleine (4 joueurs max).' });
     const player = makePlayer(socket.id, name, role);
     room.players.push(player);
@@ -437,7 +429,6 @@ io.on('connection', (socket) => {
     broadcastState(code);
   });
 
-  // ── Liste des rooms ─────────────────────────────────────────
   socket.on('getRooms', (_, cb) => {
     const available = Object.values(rooms)
       .filter(r => r.phase === 'lobby')
@@ -451,13 +442,12 @@ io.on('connection', (socket) => {
     cb({ ok: true, rooms: available });
   });
 
-  // ── Ajouter un bot ──────────────────────────────────────────
   socket.on('addBot', (_, cb) => {
     const room = getRoom(socket);
     if (!room || room.phase !== 'lobby' || !isHostSocket(socket, room))
-      return cb?.({ ok: false, error: 'Seul l\'hôte peut ajouter des bots.' });
-    const bots  = room.players.filter(p => p.isBot && p.role === 'player').length;
-    const hums  = room.players.filter(p => p.role === 'player' && !p.isBot).length;
+      return cb?.({ ok: false, error: "Seul l'hôte peut ajouter des bots." });
+    const bots = room.players.filter(p => p.isBot && p.role === 'player').length;
+    const hums = room.players.filter(p => p.role === 'player' && !p.isBot).length;
     if (hums + bots >= 4) return cb?.({ ok: false, error: 'Maximum 4 joueurs.' });
     const names = ['Alice 🤖', 'Bob 🤖', 'Charlie 🤖', 'Diana 🤖'];
     const bot   = makeBot(names[bots] || `Bot ${bots + 1} 🤖`, 'player');
@@ -483,7 +473,7 @@ io.on('connection', (socket) => {
     if (!target || target.socketId === socket.id) return cb?.({ ok: false });
     room.players   = room.players.filter(p => p.socketId !== targetSocketId);
     room.dealerIdx = room.players.findIndex(p => p.role === 'dealer');
-    io.to(targetSocketId).emit('kicked', { reason: 'Vous avez été expulsé par l\'hôte.' });
+    io.to(targetSocketId).emit('kicked', { reason: "Vous avez été expulsé par l'hôte." });
     io.to(room.code).emit('toast', `${target.name} a été expulsé`);
     cb?.({ ok: true });
     broadcastState(room.code);
@@ -495,14 +485,13 @@ io.on('connection', (socket) => {
     cb?.({ ok: true, code: room.code });
   });
 
-  // ── Démarrer ────────────────────────────────────────────────
   socket.on('startGame', (_, cb) => {
     const room = getRoom(socket);
     if (!room) return cb?.({ ok: false, error: 'Room introuvable.' });
     const me = getPlayer(socket, room);
-    if (!me) return cb?.({ ok: false });
+    if (!me) return cb?.({ ok: false, error: 'Joueur introuvable.' });
     if (me.role !== 'dealer' && !isHostSocket(socket, room))
-      return cb?.({ ok: false, error: 'Seul le croupier ou l\'hôte peut démarrer.' });
+      return cb?.({ ok: false, error: "Seul le croupier ou l'hôte peut démarrer." });
     const msgs = autoFillRoles(room);
     msgs.forEach((m, i) => setTimeout(() => io.to(room.code).emit('toast', m), 300 * i));
     room.dealerIdx = room.players.findIndex(p => p.role === 'dealer');
@@ -511,20 +500,18 @@ io.on('connection', (socket) => {
     cb?.({ ok: true });
   });
 
-  // ── Joueur prêt ─────────────────────────────────────────────
   socket.on('playerReady', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'betting') return cb?.({ ok: false });
+    if (!room || room.phase !== 'betting') return cb?.({ ok: false, error: 'Phase incorrecte.' });
     const p = getPlayer(socket, room);
-    if (!p || p.role !== 'player' || p.isBot) return cb?.({ ok: false });
+    if (!p || p.role !== 'player' || p.isBot) return cb?.({ ok: false, error: 'Action non autorisée.' });
     if (p.bet === 0) return cb?.({ ok: false, error: 'Misez d\'abord !' });
     p.ready = true;
     cb?.({ ok: true });
 
-    const humanPlayers2 = room.players.filter(q => q.role === 'player' && !q.isBot);
+    const humanPlayers = room.players.filter(q => q.role === 'player' && !q.isBot);
 
-    // FIX solo : si le joueur est seul, on distribue directement
-    if (humanPlayers2.length === 1) {
+    if (humanPlayers.length === 1) {
       io.to(room.code).emit('toast', '✓ Prêt — Distribution !');
       broadcastState(room.code);
       setTimeout(() => dealCardsForRoom(room), 600);
@@ -536,12 +523,11 @@ io.on('connection', (socket) => {
     broadcastState(room.code);
   });
 
-  // ── Mises (joueurs ET croupier) ──────────────────────────────
   socket.on('placeBet', ({ amount }, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'betting') return cb?.({ ok: false });
+    if (!room || room.phase !== 'betting') return cb?.({ ok: false, error: 'Phase incorrecte.' });
     const p = getPlayer(socket, room);
-    if (!p || p.isBot) return cb?.({ ok: false });
+    if (!p || p.isBot) return cb?.({ ok: false, error: 'Action non autorisée.' });
     if (p.balance - p.bet < amount) return cb?.({ ok: false, error: 'Solde insuffisant.' });
     p.bet += amount;
     cb?.({ ok: true });
@@ -550,19 +536,18 @@ io.on('connection', (socket) => {
 
   socket.on('clearBet', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'betting') return;
+    if (!room || room.phase !== 'betting') return cb?.({ ok: false, error: 'Phase incorrecte.' });
     const p = getPlayer(socket, room);
-    if (!p || p.isBot) return;
+    if (!p || p.isBot) return cb?.({ ok: false, error: 'Action non autorisée.' });
     p.bet = 0;
     if (p.role === 'player') p.ready = false;
     cb?.({ ok: true });
     broadcastState(room.code);
   });
 
-  // ── Distribuer les cartes ───────────────────────────────────
   socket.on('dealCards', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'betting') return cb?.({ ok: false });
+    if (!room || room.phase !== 'betting') return cb?.({ ok: false, error: 'Phase incorrecte.' });
     if (!isDealerSocket(socket, room)) return cb?.({ ok: false, error: 'Seul le croupier distribue.' });
     const unbetted = room.players.filter(p => p.role === 'player' && !p.isBot && p.bet === 0);
     if (unbetted.length > 0)
@@ -571,13 +556,16 @@ io.on('connection', (socket) => {
     cb?.({ ok: true });
   });
 
-  // ── Hit ─────────────────────────────────────────────────────
+  // ── FIX HIT : messages d'erreur explicites ──────────────────
   socket.on('hit', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'playing') return cb?.({ ok: false });
+    if (!room)                          return cb?.({ ok: false, error: 'Room introuvable.' });
+    if (room.phase !== 'playing')       return cb?.({ ok: false, error: 'Ce n\'est pas la phase de jeu.' });
     const p   = getPlayer(socket, room);
+    if (!p)                             return cb?.({ ok: false, error: 'Joueur introuvable.' });
+    if (p.isBot)                        return cb?.({ ok: false, error: 'Action non autorisée.' });
     const idx = room.players.indexOf(p);
-    if (idx !== room.currentPlayerIdx || p?.isBot) return cb?.({ ok: false, error: 'Pas ton tour.' });
+    if (idx !== room.currentPlayerIdx)  return cb?.({ ok: false, error: 'Pas ton tour.' });
 
     const hand = p.playingSplit ? p.splitHand : p.hand;
     hand.push({ ...drawCard(room.deck), hidden: false });
@@ -594,12 +582,17 @@ io.on('connection', (socket) => {
     broadcastState(room.code);
   });
 
-  // ── Stand ───────────────────────────────────────────────────
+  // ── FIX STAND : messages d'erreur explicites ─────────────────
   socket.on('stand', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'playing') return cb?.({ ok: false });
+    if (!room)                          return cb?.({ ok: false, error: 'Room introuvable.' });
+    if (room.phase !== 'playing')       return cb?.({ ok: false, error: 'Ce n\'est pas la phase de jeu.' });
     const p = getPlayer(socket, room);
-    if (room.players.indexOf(p) !== room.currentPlayerIdx || p?.isBot) return cb?.({ ok: false });
+    if (!p)                             return cb?.({ ok: false, error: 'Joueur introuvable.' });
+    if (p.isBot)                        return cb?.({ ok: false, error: 'Action non autorisée.' });
+    if (room.players.indexOf(p) !== room.currentPlayerIdx)
+                                        return cb?.({ ok: false, error: 'Pas ton tour.' });
+
     if (p.playingSplit) p.splitStood = true;
     else p.stood = true;
     advanceTurn(room);
@@ -607,15 +600,22 @@ io.on('connection', (socket) => {
     broadcastState(room.code);
   });
 
-  // ── Double ──────────────────────────────────────────────────
+  // ── FIX DOUBLE : messages d'erreur explicites ─────────────────
   socket.on('double', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'playing') return cb?.({ ok: false });
+    if (!room)                          return cb?.({ ok: false, error: 'Room introuvable.' });
+    if (room.phase !== 'playing')       return cb?.({ ok: false, error: 'Ce n\'est pas la phase de jeu.' });
     const p = getPlayer(socket, room);
-    if (room.players.indexOf(p) !== room.currentPlayerIdx || p?.isBot) return cb?.({ ok: false });
+    if (!p)                             return cb?.({ ok: false, error: 'Joueur introuvable.' });
+    if (p.isBot)                        return cb?.({ ok: false, error: 'Action non autorisée.' });
+    if (room.players.indexOf(p) !== room.currentPlayerIdx)
+                                        return cb?.({ ok: false, error: 'Pas ton tour.' });
+
     const hand = p.playingSplit ? p.splitHand : p.hand;
     const bet  = p.playingSplit ? p.splitBet  : p.bet;
-    if (hand.length !== 2 || p.balance < bet) return cb?.({ ok: false, error: 'Double impossible.' });
+    if (hand.length !== 2)  return cb?.({ ok: false, error: 'Double impossible (plus de 2 cartes).' });
+    if (p.balance < bet)    return cb?.({ ok: false, error: 'Solde insuffisant pour doubler.' });
+
     p.balance -= bet;
     if (p.playingSplit) {
       p.splitBet *= 2;
@@ -633,24 +633,32 @@ io.on('connection', (socket) => {
     broadcastState(room.code);
   });
 
-  // ── Split ───────────────────────────────────────────────────
+  // ── FIX SPLIT : compare les valeurs (pas les rank) ──────────
   socket.on('split', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'playing') return cb?.({ ok: false });
+    if (!room)                          return cb?.({ ok: false, error: 'Room introuvable.' });
+    if (room.phase !== 'playing')       return cb?.({ ok: false, error: 'Ce n\'est pas la phase de jeu.' });
     const p   = getPlayer(socket, room);
+    if (!p)                             return cb?.({ ok: false, error: 'Joueur introuvable.' });
+    if (p.isBot)                        return cb?.({ ok: false, error: 'Action non autorisée.' });
     const idx = room.players.indexOf(p);
-    if (idx !== room.currentPlayerIdx || p?.isBot) return cb?.({ ok: false, error: 'Pas ton tour.' });
-    if (p.isSplit)            return cb?.({ ok: false, error: 'Déjà splitté.' });
-    if (p.hand.length !== 2)  return cb?.({ ok: false, error: 'Split impossible.' });
-    if (p.hand[0].rank !== p.hand[1].rank) return cb?.({ ok: false, error: 'Les cartes doivent être identiques pour splitter.' });
-    if (p.balance < p.bet)    return cb?.({ ok: false, error: 'Solde insuffisant pour splitter.' });
+    if (idx !== room.currentPlayerIdx)  return cb?.({ ok: false, error: 'Pas ton tour.' });
+    if (p.isSplit)                      return cb?.({ ok: false, error: 'Déjà splitté.' });
+    if (p.hand.length !== 2)           return cb?.({ ok: false, error: 'Split impossible.' });
+
+    // FIX : compare les valeurs (10=J=Q=K), pas les rank literals
+    const cardVal = r => ['J','Q','K'].includes(r) ? 10 : r === 'A' ? 11 : parseInt(r, 10);
+    if (cardVal(p.hand[0].rank) !== cardVal(p.hand[1].rank))
+      return cb?.({ ok: false, error: 'Les cartes doivent avoir la même valeur pour splitter.' });
+    if (p.balance < p.bet)
+      return cb?.({ ok: false, error: 'Solde insuffisant pour splitter.' });
 
     p.balance  -= p.bet;
     p.splitBet  = p.bet;
     p.isSplit   = true;
-    p.splitHand = [p.hand.pop()];                                   // 2e carte → split
-    p.hand.push({ ...drawCard(room.deck), hidden: false });          // complète main 1
-    p.splitHand.push({ ...drawCard(room.deck), hidden: false });     // complète main 2
+    p.splitHand = [p.hand.pop()];
+    p.hand.push({ ...drawCard(room.deck), hidden: false });
+    p.splitHand.push({ ...drawCard(room.deck), hidden: false });
 
     if (isBlackjack(p.hand))      p.stood      = true;
     if (isBlackjack(p.splitHand)) p.splitStood = true;
@@ -660,10 +668,11 @@ io.on('connection', (socket) => {
     broadcastState(room.code);
   });
 
-  // ── Révélation croupier ─────────────────────────────────────
   socket.on('dealerReveal', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'dealer' || !isDealerSocket(socket, room)) return cb?.({ ok: false });
+    if (!room)                          return cb?.({ ok: false, error: 'Room introuvable.' });
+    if (room.phase !== 'dealer')        return cb?.({ ok: false, error: 'Ce n\'est pas le tour du croupier.' });
+    if (!isDealerSocket(socket, room))  return cb?.({ ok: false, error: 'Seul le croupier peut révéler.' });
     const dealer = room.players[room.dealerIdx];
     if (dealer) dealer.hand.forEach(c => (c.hidden = false));
     cb?.({ ok: true });
@@ -671,12 +680,12 @@ io.on('connection', (socket) => {
     scheduleDealerPlay(room);
   });
 
-  // ── Nouvelle manche ─────────────────────────────────────────
   socket.on('newRound', (_, cb) => {
     const room = getRoom(socket);
-    if (!room || room.phase !== 'results') return cb?.({ ok: false });
+    if (!room || room.phase !== 'results') return cb?.({ ok: false, error: 'Phase incorrecte.' });
     const me = getPlayer(socket, room);
-    if (!me || (me.role !== 'dealer' && !isHostSocket(socket, room))) return cb?.({ ok: false });
+    if (!me || (me.role !== 'dealer' && !isHostSocket(socket, room)))
+      return cb?.({ ok: false, error: 'Non autorisé.' });
     room.players = room.players.filter(p => p.role === 'dealer' || p.isBot || p.balance > 0);
     room.dealerIdx = room.players.findIndex(p => p.role === 'dealer');
     if (room.players.filter(p => p.role === 'player').length === 0) {
@@ -690,7 +699,6 @@ io.on('connection', (socket) => {
     broadcastState(room.code);
   });
 
-  // ── Quitter ─────────────────────────────────────────────────
   socket.on('leaveRoom', (_, cb) => {
     const room = getRoom(socket);
     if (!room) return cb?.({ ok: false });
@@ -719,7 +727,6 @@ io.on('connection', (socket) => {
     cb?.({ ok: true });
   });
 
-  // ── Déconnexion ─────────────────────────────────────────────
   socket.on('disconnect', () => {
     const code = socket.data.roomCode;
     if (!code || !rooms[code]) return;
