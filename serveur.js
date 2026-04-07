@@ -176,7 +176,20 @@ function initRound(room) {
     p.splitResult = null; p.splitGain = null;
   });
   scheduleBotBets(room);
-  startBetTimer(room, 45);
+
+  const humanPlayers = room.players.filter(p => p.role === 'player' && !p.isBot);
+  if (humanPlayers.length === 0) {
+    // FIX : que des bots comme joueurs → chrono 3s puis auto-deal
+    room.betTimerEnd = Date.now() + 3000;
+    if (room._betTimer) clearTimeout(room._betTimer);
+    room._betTimer = setTimeout(() => {
+      if (room.phase !== 'betting') return;
+      io.to(room.code).emit('toast', 'Distribution automatique !');
+      dealCardsForRoom(room);
+    }, 3000);
+  } else {
+    startBetTimer(room, 45);
+  }
 }
 
 // ── Avancer le tour (avec gestion split) ──────────────────────
@@ -286,19 +299,41 @@ function dealCardsForRoom(room) {
   room.players[room.dealerIdx].hand[1].hidden = true;
 
   // Blackjacks immédiats
+  // FIX : on n'émet l'overlay qu'au joueur concerné, pas à toute la room
+  // (sinon l'overlay bloque les autres joueurs qui doivent encore jouer)
+  const blackjackNames = [];
   room.players.forEach(p => {
     if (p.role === 'player' && isBlackjack(p.hand)) {
       p.stood = true;
-      io.to(room.code).emit('blackjack', { name: p.name });
-      setTimeout(() => io.to(room.code).emit('toast', `${p.name} — Blackjack ! ♠`), 600);
+      blackjackNames.push(p.name);
+      if (!p.isBot) {
+        // Seulement pour ce joueur
+        io.to(p.socketId).emit('blackjack', { name: p.name });
+      }
     }
   });
+  // Toast global pour informer tout le monde
+  if (blackjackNames.length > 0) {
+    setTimeout(() => {
+      io.to(room.code).emit('toast', `♠ Blackjack : ${blackjackNames.join(', ')} !`);
+    }, 400);
+  }
 
   room.phase = 'playing';
   room.currentPlayerIdx = nextPlayerIdx(room.players, -1);
 
   if (room.currentPlayerIdx === -1) {
     room.phase = 'dealer';
+    if (blackjackNames.length > 0) {
+      // Laisser le temps à l'overlay de s'afficher avant le tour croupier
+      setTimeout(() => {
+        io.to(room.code).emit('toast', 'Tour du croupier !');
+        autoDealerRevealIfBot(room);
+        broadcastState(room.code);
+      }, 1500);
+      broadcastState(room.code); // premier broadcast pour afficher les cartes
+      return;
+    }
     io.to(room.code).emit('toast', 'Tour du croupier !');
     autoDealerRevealIfBot(room);
   } else {
@@ -484,9 +519,20 @@ io.on('connection', (socket) => {
     if (!p || p.role !== 'player' || p.isBot) return cb?.({ ok: false });
     if (p.bet === 0) return cb?.({ ok: false, error: 'Misez d\'abord !' });
     p.ready = true;
+    cb?.({ ok: true });
+
+    const humanPlayers2 = room.players.filter(q => q.role === 'player' && !q.isBot);
+
+    // FIX solo : si le joueur est seul, on distribue directement
+    if (humanPlayers2.length === 1) {
+      io.to(room.code).emit('toast', '✓ Prêt — Distribution !');
+      broadcastState(room.code);
+      setTimeout(() => dealCardsForRoom(room), 600);
+      return;
+    }
+
     io.to(room.code).emit('toast', `${p.name} est prêt !`);
     checkAllReady(room);
-    cb?.({ ok: true });
     broadcastState(room.code);
   });
 
