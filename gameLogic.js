@@ -1,12 +1,10 @@
 // ═══════════════════════════════════════════════════════════
-//  gameLogic.js — Logique pure du Blackjack (aucun DOM, aucun état global)
-//  Toutes ces fonctions sont stateless : elles reçoivent des données
-//  et retournent des données. Faciles à tester unitairement.
+//  gameLogic.js — Logique pure du Blackjack (stateless)
 // ═══════════════════════════════════════════════════════════
 
-const SUITS = ['♠', '♥', '♦', '♣'];
-const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-const RED_SUITS = ['♥', '♦'];
+const SUITS    = ['♠','♥','♦','♣'];
+const RANKS    = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const RED_SUITS = ['♥','♦'];
 
 // ── Deck ────────────────────────────────────────────────────
 function buildDeck(numDecks = 2) {
@@ -34,105 +32,105 @@ function drawCard(deck) {
 
 // ── Valeurs ──────────────────────────────────────────────────
 function cardValue(rank) {
-  if (['J', 'Q', 'K'].includes(rank)) return 10;
+  if (['J','Q','K'].includes(rank)) return 10;
   if (rank === 'A') return 11;
   return parseInt(rank, 10);
 }
 
-/**
- * Calcule le total d'une main en ignorant les cartes cachées.
- * @param {Array} hand - tableau de { rank, suit, hidden? }
- * @returns {number}
- */
 function handTotal(hand) {
-  let total = 0;
-  let aces = 0;
-  for (const card of hand) {
-    if (card.hidden) continue;
-    total += cardValue(card.rank);
-    if (card.rank === 'A') aces++;
+  let total = 0, aces = 0;
+  for (const c of hand) {
+    if (c.hidden) continue;
+    total += cardValue(c.rank);
+    if (c.rank === 'A') aces++;
   }
   while (total > 21 && aces > 0) { total -= 10; aces--; }
   return total;
 }
 
 function isBust(hand)      { return handTotal(hand) > 21; }
-function isBlackjack(hand) { return handTotal(hand) === 21 && hand.length === 2; }
+function isBlackjack(hand) { return handTotal(hand) === 21 && hand.filter(c=>!c.hidden).length === 2; }
+
 function isSoft17(hand) {
-  // Main molle 17 : contient un as compté comme 11 + total = 17
   const total = handTotal(hand);
   if (total !== 17) return false;
-  // Vérifier qu'il y a un as "souple"
   let t = 0, aces = 0;
   for (const c of hand) {
     if (c.hidden) continue;
     t += cardValue(c.rank);
     if (c.rank === 'A') aces++;
   }
-  return aces > 0 && t !== 17; // l'as est compté comme 11 donc t > 17 avant réduction
+  return aces > 0 && t !== 17;
 }
 
-// ── Résultats ────────────────────────────────────────────────
-/**
- * Détermine le résultat d'un joueur par rapport au croupier.
- * @returns {{ result: 'win'|'lose'|'push', gain: number }}
- */
-function resolvePlayer(player, dealerHand) {
+// ── Split ────────────────────────────────────────────────────
+function canSplit(hand) {
+  if (hand.length !== 2) return false;
+  return cardValue(hand[0].rank) === cardValue(hand[1].rank);
+}
+
+// ── Résolution d'une main ─────────────────────────────────────
+function resolveHand(hand, bet, busted, dealerHand) {
   const dealerTotal = handTotal(dealerHand);
   const dealerBJ    = isBlackjack(dealerHand);
   const dealerBust  = isBust(dealerHand);
+  const pTotal = handTotal(hand);
+  const pBJ    = isBlackjack(hand);
 
-  const pTotal = handTotal(player.hand);
-  const pBJ    = isBlackjack(player.hand);
-
-  if (player.busted) {
-    return { result: 'lose', gain: -player.bet };
-  }
-  if (pBJ && dealerBJ) {
-    return { result: 'push', gain: 0 };
-  }
-  if (pBJ) {
-    const gain = Math.floor(player.bet * 1.5);
-    return { result: 'win', gain };
-  }
-  if (dealerBust || pTotal > dealerTotal) {
-    return { result: 'win', gain: player.bet };
-  }
-  if (pTotal === dealerTotal) {
-    return { result: 'push', gain: 0 };
-  }
-  return { result: 'lose', gain: -player.bet };
+  if (busted)           return { result:'lose', gain: -bet };
+  if (pBJ && dealerBJ)  return { result:'push', gain: 0 };
+  if (pBJ)              return { result:'win',  gain: Math.floor(bet * 1.5) };
+  if (dealerBust || pTotal > dealerTotal) return { result:'win', gain: bet };
+  if (pTotal === dealerTotal)             return { result:'push', gain: 0 };
+  return { result:'lose', gain: -bet };
 }
 
-/**
- * Calcule les résultats pour tous les joueurs d'une room.
- * @param {Object} gameState - état complet du jeu côté serveur
- * @returns {Array} joueurs avec result + gain + balance mis à jour
- */
+// ── Résultats complets (gère le split) ───────────────────────
 function computeResults(gameState) {
   const dealer = gameState.players[gameState.dealerIdx];
   return gameState.players.map(p => {
     if (p.role === 'dealer') return p;
-    const { result, gain } = resolvePlayer(p, dealer.hand);
-    const balanceDelta = gain; // la mise a déjà été déduite au deal
+
+    const main = resolveHand(p.hand, p.bet, p.busted, dealer.hand);
+
+    if (!p.hasSplit) {
+      return {
+        ...p,
+        result:  main.result,
+        gain:    main.gain,
+        balance: p.balance + (main.result === 'lose' ? 0 : p.bet + main.gain),
+      };
+    }
+
+    // Résolution de la main splitée
+    const split = resolveHand(p.splitHand, p.splitBet, p.splitBusted, dealer.hand);
+    const totalGain = main.gain + split.gain;
+
+    let newBalance = p.balance;
+    if (main.result  !== 'lose') newBalance += p.bet      + main.gain;
+    if (split.result !== 'lose') newBalance += p.splitBet + split.gain;
+
+    const overallResult = totalGain > 0 ? 'win' : totalGain === 0 ? 'push' : 'lose';
+
     return {
       ...p,
-      result,
-      gain,
-      balance: p.balance + (result === 'lose' ? 0 : p.bet + gain)
+      result:      overallResult,
+      gain:        totalGain,
+      balance:     newBalance,
+      mainResult:  main,
+      splitResult: split,
     };
   });
 }
 
-// ── Export (Node.js) ─────────────────────────────────────────
+// ── Résolution legacy (compatibilité) ────────────────────────
+function resolvePlayer(player, dealerHand) {
+  return resolveHand(player.hand, player.bet, player.busted, dealerHand);
+}
+
+// ── Export ────────────────────────────────────────────────────
 module.exports = {
-  buildDeck,
-  drawCard,
-  handTotal,
-  isBust,
-  isBlackjack,
-  isSoft17,
-  resolvePlayer,
-  computeResults,
-  RED_SUITS,
+  buildDeck, drawCard, handTotal,
+  isBust, isBlackjack, isSoft17, canSplit,
+  resolvePlayer, computeResults, RED_SUITS,
 };
