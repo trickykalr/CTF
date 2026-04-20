@@ -2,15 +2,12 @@
 //  ui.js — Rendu DOM
 // ═══════════════════════════════════════════════════════════
 
-
 const RED_SUITS = ['♥', '♦'];
 
 function renderCard(card) {
   if (card.hidden) return `<div class="card hidden"></div>`;
-
   const isRed = RED_SUITS.includes(card.suit);
   const cls   = isRed ? 'red' : 'black-card';
-
   return `
     <div class="card ${cls}">
       <div class="ci-tl">
@@ -48,11 +45,11 @@ function showBlackjackCelebration(name) {
   const syms = ['🪙','💰','♠','♣','🎰','💎','♥','♦'];
   let rain = '';
   for (let i = 0; i < 40; i++) {
-    const s = syms[i % syms.length];
-    const left = Math.random() * 100;
+    const s     = syms[i % syms.length];
+    const left  = Math.random() * 100;
     const delay = Math.random() * 2.5;
-    const dur = 1.8 + Math.random() * 2;
-    const sz = 0.8 + Math.random() * 1.4;
+    const dur   = 1.8 + Math.random() * 2;
+    const sz    = 0.8 + Math.random() * 1.4;
     rain += `<span style="position:absolute;top:-60px;left:${left}%;font-size:${sz}rem;
       animation:coinFall ${dur}s ${delay}s linear infinite;pointer-events:none">${s}</span>`;
   }
@@ -86,13 +83,13 @@ function getDrama(state) {
   const wins    = players.filter(p => p.result === 'win').length;
 
   if (allLost && !dbust)
-    return { text: 'Le croupier vous a dépouillés !', sub: 'La banque remercie votre générosité…', icon: '💀', cls: 'drama-lose' };
+    return { text: 'Le croupier vous a dépouillés !',  sub: 'La banque remercie votre générosité…', icon: '💀', cls: 'drama-lose' };
   if (dbust)
-    return { text: 'Le croupier a sauté !', sub: 'Les joueurs empochent leurs gains !', icon: '💥', cls: 'drama-win' };
+    return { text: 'Le croupier a sauté !',             sub: 'Les joueurs empochent leurs gains !',  icon: '💥', cls: 'drama-win' };
   if (allWon)
-    return { text: 'On a braqué la banque !', sub: 'Les joueurs repartent les poches pleines !', icon: '🎰', cls: 'drama-win' };
+    return { text: 'On a braqué la banque !',           sub: 'Les joueurs repartent les poches pleines !', icon: '🎰', cls: 'drama-win' };
   if (wins > 0 && wins > players.length / 2)
-    return { text: 'Les joueurs prennent le dessus !', sub: 'La banque commence à transpirer…', icon: '💸', cls: 'drama-win' };
+    return { text: 'Les joueurs prennent le dessus !',  sub: 'La banque commence à transpirer…',    icon: '💸', cls: 'drama-win' };
   return null;
 }
 
@@ -106,10 +103,11 @@ function updateBetTimer(state) {
 
   el.style.display = 'flex';
   const totalSec = state.gameOptions?.betTimerSec || 45;
+
   function tick() {
-    const rem = Math.max(0, Math.ceil((state.betTimerEnd - Date.now()) / 1000));
-    const pct = rem / totalSec;
-    const r = 20, circ = 2 * Math.PI * r;
+    const rem  = Math.max(0, Math.ceil((state.betTimerEnd - Date.now()) / 1000));
+    const pct  = rem / totalSec;
+    const r    = 20, circ = 2 * Math.PI * r;
     const dash = pct * circ;
     el.innerHTML = `
       <svg width="54" height="54" style="transform:rotate(-90deg)">
@@ -132,12 +130,11 @@ function renderInsurancePhase(state, mySocketId) {
   const zone = document.getElementById('playersZone');
   if (!zone) return;
   zone.innerHTML = '';
-
   const me = state.players.find(p => p.socketId === mySocketId);
   if (!me || me.role !== 'player' || me.isBot) return;
 
   const maxInsurance = Math.floor(me.bet / 2);
-  const already = me.insuranceBet > 0 || me.insuranceDeclined;
+  const already      = me.insuranceBet > 0 || me.insuranceDeclined;
 
   const div = document.createElement('div');
   div.className = 'player-card active';
@@ -174,20 +171,21 @@ function renderInsurancePhase(state, mySocketId) {
 function updateActionBar(state, mySocketId) {
   const bar = document.getElementById('actionBar');
   if (!bar) return;
-  const me    = state.players.find(p => p.socketId === mySocketId);
-  const myIdx = state.players.indexOf(me);
+  const me     = state.players.find(p => p.socketId === mySocketId);
+  const myIdx  = state.players.indexOf(me);
   const myTurn = state.phase === 'playing'
     && myIdx >= 0 && myIdx === state.currentPlayerIdx
     && me && !me.isBot && me.role === 'player';
 
   if (myTurn) {
     bar.classList.add('show');
-    const canDbl   = (me.playingSplit ? me.splitHand : me.hand).length === 2 && me.balance >= (me.playingSplit ? me.splitBet : me.bet);
+    const canDbl  = (me.playingSplit ? me.splitHand : me.hand).length === 2
+                    && me.balance >= (me.playingSplit ? me.splitBet : me.bet);
     const canSplit = !me.playingSplit && !me.isSplit && me.hand.length === 2
-      && me.hand[0].rank === me.hand[1].rank && me.balance >= me.bet;
-    const dbl  = document.getElementById('abDouble');
-    const spl  = document.getElementById('abSplit');
-    if (dbl) dbl.style.display = canDbl ? '' : 'none';
+                    && me.hand[0].rank === me.hand[1].rank && me.balance >= me.bet;
+    const dbl = document.getElementById('abDouble');
+    const spl = document.getElementById('abSplit');
+    if (dbl) dbl.style.display = canDbl   ? '' : 'none';
     if (spl) spl.style.display = canSplit ? '' : 'none';
   } else {
     bar.classList.remove('show');
@@ -200,14 +198,14 @@ function renderLobby(state, mySocketId) {
   if (!list) return;
   list.innerHTML = '';
 
-  const me     = state.players.find(p => p.socketId === mySocketId);
-  const isHost = state.hostSocketId === mySocketId;
+  const me      = state.players.find(p => p.socketId === mySocketId);
+  const isHost  = state.hostSocketId === mySocketId;
   const canStart = isHost || me?.role === 'dealer';
 
   state.players.forEach(p => {
-    const isMe    = p.socketId === mySocketId;
-    const isOwner = p.socketId === state.hostSocketId;
-    const strategyLabel = p.isBot && p.strategy ? ` <span style="font-size:.65rem;opacity:.5">[${p.strategy}]</span>` : '';
+    const isMe     = p.socketId === mySocketId;
+    const isOwner  = p.socketId === state.hostSocketId;
+    const stratLbl = p.isBot && p.strategy ? ` <span style="font-size:.65rem;opacity:.5">[${p.strategy}]</span>` : '';
     const kickBtn  = (isHost && !isMe && !p.isBot)
       ? `<button onclick="window.gameActions.kickPlayer('${p.socketId}')"
           style="background:none;border:1px solid rgba(231,76,60,.4);color:#e74c3c;
@@ -222,7 +220,7 @@ function renderLobby(state, mySocketId) {
       <span class="lp-role">${p.role==='dealer'?'🎩':p.isBot?'🤖':'🃏'}</span>
       <span class="lp-name">
         ${isOwner ? '<span style="color:var(--gold);margin-right:3px">👑</span>' : ''}
-        ${p.name}${isMe?' <em>(vous)</em>':''}${strategyLabel}
+        ${p.name}${isMe?' <em>(vous)</em>':''}${stratLbl}
         ${p.ready && p.role==='player' ? '<span style="color:#2ecc71;margin-left:6px;font-size:.75rem">✓</span>' : ''}
       </span>
       <span class="lp-bal">${p.isBot?'BOT':p.balance+'$'}</span>
@@ -230,7 +228,6 @@ function renderLobby(state, mySocketId) {
     list.appendChild(li);
   });
 
-  // Zone hôte
   let hz = document.getElementById('hostZone');
   if (!hz) {
     hz = document.createElement('div');
@@ -249,7 +246,6 @@ function renderLobby(state, mySocketId) {
                font-family:'Cinzel',serif;font-size:.93rem;min-height:44px">🤖 Ajouter un bot</button>`;
     }
 
-    // ── Options de partie (NOUVEAU) ──
     const opts = state.gameOptions || {};
     hz.innerHTML += `
       <button onclick="document.getElementById('optionsPanel').style.display=document.getElementById('optionsPanel').style.display==='none'?'block':'none'"
@@ -270,8 +266,7 @@ function renderLobby(state, mySocketId) {
         <label style="display:flex;justify-content:space-between;align-items:center;font-size:.85rem">
           <span>Nombre de paquets</span>
           <select id="optNumDecks" onchange="window.gameActions.setOptions()"
-            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);
-                   border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
+            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
             <option value="1" ${(opts.numDecks||2)===1?'selected':''}>1 paquet</option>
             <option value="2" ${(opts.numDecks||2)===2?'selected':''}>2 paquets</option>
             <option value="4" ${(opts.numDecks||2)===4?'selected':''}>4 paquets</option>
@@ -282,8 +277,7 @@ function renderLobby(state, mySocketId) {
         <label style="display:flex;justify-content:space-between;align-items:center;font-size:.85rem">
           <span>Paiement Blackjack</span>
           <select id="optBjPayout" onchange="window.gameActions.setOptions()"
-            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);
-                   border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
+            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
             <option value="1.5" ${(opts.bjPayout||1.5)===1.5?'selected':''}>3:2 (standard)</option>
             <option value="1.2" ${(opts.bjPayout||1.5)===1.2?'selected':''}>6:5</option>
             <option value="1"   ${(opts.bjPayout||1.5)===1?'selected':''}>1:1</option>
@@ -292,8 +286,7 @@ function renderLobby(state, mySocketId) {
         <label style="display:flex;justify-content:space-between;align-items:center;font-size:.85rem">
           <span>Timer de mise (sec)</span>
           <select id="optBetTimer" onchange="window.gameActions.setOptions()"
-            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);
-                   border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
+            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
             <option value="30" ${(opts.betTimerSec||45)===30?'selected':''}>30 s</option>
             <option value="45" ${(opts.betTimerSec||45)===45?'selected':''}>45 s</option>
             <option value="60" ${(opts.betTimerSec||45)===60?'selected':''}>60 s</option>
@@ -302,8 +295,7 @@ function renderLobby(state, mySocketId) {
         <label style="display:flex;justify-content:space-between;align-items:center;font-size:.85rem">
           <span>Mise max par manche</span>
           <select id="optMaxBet" onchange="window.gameActions.setOptions()"
-            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);
-                   border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
+            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
             <option value="500"  ${(opts.maxBet||500)===500?'selected':''}>500$</option>
             <option value="1000" ${(opts.maxBet||500)===1000?'selected':''}>1000$</option>
             <option value="9999" ${(opts.maxBet||500)===9999?'selected':''}>Illimité</option>
@@ -312,8 +304,7 @@ function renderLobby(state, mySocketId) {
         <label style="display:flex;justify-content:space-between;align-items:center;font-size:.85rem">
           <span>Splits max</span>
           <select id="optMaxSplits" onchange="window.gameActions.setOptions()"
-            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);
-                   border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
+            style="background:#0d2418;border:1px solid rgba(201,168,76,.3);color:var(--cream);border-radius:6px;padding:6px 10px;font-family:'Cinzel',serif;font-size:.8rem">
             <option value="1" ${(opts.maxSplits||1)===1?'selected':''}>1 split</option>
             <option value="3" ${(opts.maxSplits||1)===3?'selected':''}>3 splits</option>
           </select>
@@ -356,7 +347,7 @@ function renderLobby(state, mySocketId) {
     if (canStart) { waitMsg.style.display = 'none'; }
     else {
       waitMsg.style.display = '';
-      waitMsg.textContent = state.players.some(p=>p.role==='dealer')
+      waitMsg.textContent   = state.players.some(p => p.role === 'dealer')
         ? 'En attente que le croupier lance la partie…'
         : "En attente du démarrage par l'hôte…";
     }
@@ -394,9 +385,9 @@ function renderRoomList(rooms) {
 function renderDealerZone(state, mySocketId) {
   const dealer = state.players[state.dealerIdx];
   if (!dealer) return;
-  document.getElementById('dealerName').textContent = dealer.name + (dealer.isBot?' 🤖':'');
-  document.getElementById('dealerHand').innerHTML   = dealer.hand.map(renderCard).join('');
-  document.getElementById('dealerValue').innerHTML  = dealer.hand.length ? renderHandValue(dealer.hand, dealer.handTotal) : '';
+  document.getElementById('dealerName').textContent  = dealer.name + (dealer.isBot ? ' 🤖' : '');
+  document.getElementById('dealerHand').innerHTML    = dealer.hand.map(renderCard).join('');
+  document.getElementById('dealerValue').innerHTML   = dealer.hand.length ? renderHandValue(dealer.hand, dealer.handTotal) : '';
   const acts = document.getElementById('dealerActions');
   if (!acts) return;
   acts.innerHTML = '';
@@ -408,9 +399,7 @@ function renderDealerZone(state, mySocketId) {
     const allReady    = state.allPlayersReady;
     acts.innerHTML = `
       <div style="text-align:center;width:100%">
-        <div style="font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:7px">
-          Votre mise (optionnelle)
-        </div>
+        <div style="font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:7px">Votre mise (optionnelle)</div>
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:8px">
           <div class="chip c5"   onclick="window.gameActions.placeBet(5)">5</div>
           <div class="chip c10"  onclick="window.gameActions.placeBet(10)">10</div>
@@ -422,8 +411,7 @@ function renderDealerZone(state, mySocketId) {
           Mise : <span style="color:var(--gold);font-weight:600">${dealer.bet||0}$</span>
           ${dealer.bet>0?`<button class="btn-clr" onclick="window.gameActions.clearBet()" style="margin-left:8px">✕</button>`:''}
         </div>
-        <div style="font-size:.8rem;margin-bottom:10px;
-          color:${allReady?'#2ecc71':'var(--gold-dk)'}">
+        <div style="font-size:.8rem;margin-bottom:10px;color:${allReady?'#2ecc71':'var(--gold-dk)'}">
           ${totalHumans>0?`${readyCount}/${totalHumans} joueur${totalHumans>1?'s':''} prêt${readyCount>1?'s':''}`:''} 
           ${allReady?'✓ Tous prêts !':''}
         </div>
@@ -439,12 +427,10 @@ function renderDealerZone(state, mySocketId) {
 
 // ── Zone joueurs ──────────────────────────────────────────────
 function renderPlayersZone(state, mySocketId) {
-  // Si phase assurance, rendu spécial
   if (state.phase === 'insurance') {
     renderInsurancePhase(state, mySocketId);
     return;
   }
-
   const zone = document.getElementById('playersZone');
   if (!zone) return;
   zone.innerHTML = '';
@@ -465,10 +451,9 @@ function renderPlayersZone(state, mySocketId) {
     else if (p.busted && !p.isSplit) badge = `<div class="active-badge bust-badge">Bust!</div>`;
     else if (p.stood && (!p.isSplit || p.splitStood)) badge = `<div class="active-badge stand-badge">Stand</div>`;
 
-    // Section mise (phase betting, humain)
     let bet = '';
     if (state.phase === 'betting' && isMe && !p.isBot) {
-      const maxBet  = state.gameOptions?.maxBet || 500;
+      const maxBet   = state.gameOptions?.maxBet || 500;
       const canReady = p.bet > 0 && !p.ready;
       const isReady  = p.ready;
       bet = `<div class="bet-section">
@@ -485,9 +470,8 @@ function renderPlayersZone(state, mySocketId) {
           ${p.bet>0&&!p.ready?`<button class="btn-clr" onclick="window.gameActions.clearBet()">✕</button>`:''}
         </div>
         ${canReady ? `<button onclick="window.gameActions.playerReady()"
-          style="margin-top:9px;width:100%;background:rgba(39,174,96,.15);
-                 border:1px solid #27ae60;color:#2ecc71;border-radius:9px;
-                 padding:10px;cursor:pointer;font-family:'Cinzel',serif;
+          style="margin-top:9px;width:100%;background:rgba(39,174,96,.15);border:1px solid #27ae60;
+                 color:#2ecc71;border-radius:9px;padding:10px;cursor:pointer;font-family:'Cinzel',serif;
                  font-size:.93rem;min-height:42px;transition:all .2s"
           onmouseover="this.style.background='rgba(39,174,96,.25)'"
           onmouseout="this.style.background='rgba(39,174,96,.15)'">
@@ -503,7 +487,6 @@ function renderPlayersZone(state, mySocketId) {
       </div>`;
     }
 
-    // Mains (avec split)
     let handsHtml = '';
     if (p.isSplit) {
       const m1Active = isActive && !p.playingSplit;
@@ -533,14 +516,13 @@ function renderPlayersZone(state, mySocketId) {
         ${p.hand.length?`<div class="hand-value">${renderHandValue(p.hand, p.handTotal)}</div>`:''}`;
     }
 
-    // Actions inline (desktop)
     let inline = '';
     if (isActive && isMe && !p.isBot && state.phase === 'playing') {
-      const hand    = p.playingSplit ? p.splitHand : p.hand;
-      const curBet  = p.playingSplit ? p.splitBet  : p.bet;
-      const canDbl  = hand.length === 2 && p.balance >= curBet;
-      const canSpl  = !p.isSplit && !p.playingSplit && p.hand.length === 2
-                      && p.hand[0]?.rank === p.hand[1]?.rank && p.balance >= p.bet;
+      const hand   = p.playingSplit ? p.splitHand : p.hand;
+      const curBet = p.playingSplit ? p.splitBet  : p.bet;
+      const canDbl = hand.length === 2 && p.balance >= curBet;
+      const canSpl = !p.isSplit && !p.playingSplit && p.hand.length === 2
+                     && p.hand[0]?.rank === p.hand[1]?.rank && p.balance >= p.bet;
       inline = `<div class="inline-acts">
         <button class="ia-btn ia-hit"   onclick="window.gameActions.hit()">Tirer</button>
         <button class="ia-btn ia-stand" onclick="window.gameActions.stand()">Rester</button>
@@ -559,6 +541,7 @@ function renderPlayersZone(state, mySocketId) {
 }
 
 // ── Résultats ─────────────────────────────────────────────────
+// CORRIGÉ : renommage de `c` en `cardEl` pour éviter l'ombre de variable
 function renderResults(state, mySocketId) {
   const grid = document.getElementById('resultsGrid');
   if (!grid) return;
@@ -580,19 +563,19 @@ function renderResults(state, mySocketId) {
     const label  = p.result==='win'?'Gagné !':p.result==='push'?'Égalité':'Perdu';
     const gain   = p.gain>0?`+${p.gain}$`:p.gain===0?'±0$':`${p.gain}$`;
     const isMe   = p.socketId === mySocketId;
-    // Résultat assurance
     const insHtml = (p.insuranceBet > 0)
       ? `<div style="font-size:.75rem;color:#5dade2;margin-top:4px">
            🛡 Assurance: ${p.insuranceResult==='win'?`+${p.insuranceBet*2}$`:`-${p.insuranceBet}$`}
          </div>` : '';
 
-    const c = document.createElement('div');
-    c.className = `result-card ${p.result||''}`;
-    c.style.animationDelay = `${i*.1}s`;
-    c.innerHTML = `
+    // CORRIGÉ : renommé `c` → `cardEl` pour éviter l'ombre avec le `.map(c => ...)`
+    const cardEl = document.createElement('div');
+    cardEl.className = `result-card ${p.result||''}`;
+    cardEl.style.animationDelay = `${i * .1}s`;
+    cardEl.innerHTML = `
       <div class="r-name">${p.isBot?'🤖 ':''}${p.name}${isMe?' ⭐':''}</div>
       <div style="font-size:.78rem;color:rgba(245,239,224,.42);margin-bottom:8px">
-        ${p.hand.map(c=>`${c.rank}${c.suit}`).join(' ')}
+        ${p.hand.map(c => `${c.rank}${c.suit}`).join(' ')}
       </div>
       <div class="r-outcome ${p.result||''}">${label}</div>
       <div class="r-money">${gain}</div>
@@ -602,7 +585,7 @@ function renderResults(state, mySocketId) {
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,168,76,.2)">
           <div style="font-size:.68rem;color:var(--gold-dk);margin-bottom:4px;letter-spacing:.1em;text-transform:uppercase">✂ Main 2 (split)</div>
           <div style="font-size:.76rem;color:rgba(245,239,224,.42);margin-bottom:5px">
-            ${(p.splitHand||[]).map(c=>`${c.rank}${c.suit}`).join(' ')}
+            ${(p.splitHand||[]).map(c => `${c.rank}${c.suit}`).join(' ')}
           </div>
           <div class="r-outcome ${p.splitResult||''}" style="font-size:1.15rem">
             ${p.splitResult==='win'?'Gagné !':p.splitResult==='push'?'Égalité':'Perdu'}
@@ -611,23 +594,22 @@ function renderResults(state, mySocketId) {
             ${p.splitGain>0?`+${p.splitGain}$`:p.splitGain===0?'±0$':`${p.splitGain}$`}
           </div>
         </div>` : ''}`;
-    grid.appendChild(c);
+    grid.appendChild(cardEl);
   });
 
   const dealer = state.players[state.dealerIdx];
-  const el = document.getElementById('dealerFinalScore');
+  const el     = document.getElementById('dealerFinalScore');
   if (el && dealer) {
-    const t = dealer.handTotal||0;
-    el.textContent = t>21?`Bust (${t})`:String(t);
+    const t = dealer.handTotal || 0;
+    el.textContent = t > 21 ? `Bust (${t})` : String(t);
     if (isBlackjack_check(dealer.hand)) el.textContent += ' — Blackjack !';
   }
 
-  const me = state.players.find(p => p.socketId === mySocketId);
+  const me    = state.players.find(p => p.socketId === mySocketId);
   const btnNR = document.getElementById('btnNewRound');
-  if (btnNR) btnNR.style.display = (me?.role==='dealer'||state.hostSocketId===mySocketId)?'':'none';
+  if (btnNR) btnNR.style.display = (me?.role === 'dealer' || state.hostSocketId === mySocketId) ? '' : 'none';
 }
 
-// Helper local pour éviter la dépendance à gameLogic côté client
 function isBlackjack_check(hand) {
   if (!hand) return false;
   const visible = hand.filter(c => !c.hidden);
