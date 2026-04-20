@@ -35,7 +35,6 @@
     --radius-lg: 18px;
   }
 
-  /* ══ RESET & BASE ══ */
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
   html, body {
     font-family: 'Lora', serif;
@@ -49,7 +48,6 @@
       url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.012'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
-  /* ══ ANIMATIONS ══ */
   @keyframes coinFall   { 0%{transform:translateY(-80px) rotate(0);opacity:1;} 100%{transform:translateY(110vh) rotate(720deg);opacity:0;} }
   @keyframes bjPulse    { from{transform:scale(1);text-shadow:0 0 60px rgba(201,168,76,.9);} to{transform:scale(1.07);text-shadow:0 0 120px rgba(201,168,76,1),0 0 6px #fff;} }
   @keyframes bjFadeIn   { from{opacity:0;} to{opacity:1;} }
@@ -60,7 +58,6 @@
   @keyframes shimmer    { 0%,100%{opacity:.4;} 50%{opacity:.75;} }
   @keyframes spin       { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
 
-  /* ══ LOGO ══ */
   .logo { text-align: center; }
   .logo h1 {
     font-family: 'Cinzel Decorative', serif;
@@ -86,7 +83,6 @@
     color: var(--gold); opacity: .3; margin-top: 8px;
   }
 
-  /* ══ BOÎTE COMMUNE ══ */
   .card-box {
     background: linear-gradient(145deg, rgba(13,36,24,.92), rgba(9,26,16,.96));
     border: 1px solid var(--border);
@@ -108,7 +104,6 @@
     text-shadow: 0 0 24px rgba(201,168,76,.25);
   }
 
-  /* ══ CHAMPS ══ */
   .field { margin-bottom: 14px; }
   .field label {
     display: block;
@@ -158,7 +153,6 @@
     box-shadow: inset 0 0 0 1px rgba(201,168,76,.15);
   }
 
-  /* ══ BOUTONS PRINCIPAUX ══ */
   .btn-gold {
     width: 100%;
     background: linear-gradient(160deg, #c9a84c, #8a6f2e 60%, #c9a84c);
@@ -174,8 +168,8 @@
     min-height: 52px;
     text-transform: uppercase;
   }
-  .btn-gold:hover { background-position: 100% 0; box-shadow: 0 6px 28px rgba(201,168,76,.38); }
-  .btn-gold:active { transform: scale(.97); }
+  .btn-gold:hover    { background-position: 100% 0; box-shadow: 0 6px 28px rgba(201,168,76,.38); }
+  .btn-gold:active   { transform: scale(.97); }
   .btn-gold:disabled { opacity: .38; cursor: not-allowed; transform: none; }
 
   .btn-outline-red {
@@ -190,7 +184,6 @@
   }
   .btn-outline-red:active { background: rgba(185,28,28,.1); }
 
-  /* ══ ÉCRAN JOIN ══ */
   #screenJoin {
     min-height: 100vh; display: flex; flex-direction: column;
     align-items: center; justify-content: center; padding: 24px 16px; gap: 30px;
@@ -203,9 +196,8 @@
     border-radius: var(--radius-md); padding: 16px 22px;
   }
   #roomCodeBanner p { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dk); margin-bottom:6px; }
-  #roomCodeDisplay { font-family:'Cinzel Decorative',serif; font-size:2.2rem; color:var(--gold); letter-spacing:.3em; font-weight:700; text-shadow:0 0 30px rgba(201,168,76,.3); }
+  #roomCodeDisplay  { font-family:'Cinzel Decorative',serif; font-size:2.2rem; color:var(--gold); letter-spacing:.3em; font-weight:700; text-shadow:0 0 30px rgba(201,168,76,.3); }
 
-  /* ══ LOBBY ══ */
   #screenLobby { display:none; min-height:100vh; flex-direction:column; align-items:center; justify-content:center; padding:24px 16px; gap:22px; }
   #lobbyPlayersList { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
   .lobby-player {
@@ -225,7 +217,6 @@
   .waiting-msg { text-align:center; color:var(--gold-dk); font-style:italic; font-size:.84rem; padding:10px 12px; background:rgba(0,0,0,.18); border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border); }
   .lobby-btn-group { display:flex; flex-direction:column; gap:10px; }
 
-  /* ══ ÉCRAN JEU ══ */
   #screenGame { display:none; min-height:100vh; padding:14px 12px calc(var(--bar-h) + var(--safe-b) + 14px); }
   .game-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:0 2px; }
   .game-title { font-family:'Cinzel Decorative',serif; color:var(--gold); font-size:clamp(.8rem,3vw,1rem); letter-spacing:.06em; text-shadow:0 0 20px rgba(201,168,76,.25); }
@@ -238,244 +229,157 @@
   .btn-quit:hover { border-color:var(--gold-dk); color:var(--gold); }
 
   .phase-banner {
-    text-align:center;
-    font-family:'Cinzel',serif;
-    font-size:clamp(.7rem,2.5vw,.88rem);
-    color:var(--gold);
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    margin-bottom:12px;
-    min-height:20px;
-    opacity:.85;
+    text-align:center; font-family:'Cinzel',serif;
+    font-size:clamp(.7rem,2.5vw,.88rem); color:var(--gold);
+    letter-spacing:.18em; text-transform:uppercase;
+    margin-bottom:6px; min-height:20px; opacity:.85;
   }
 
-  /* ── Dealer zone ── */
+  /* AJOUTÉ : Timer de mise (était référencé dans ui.js mais absent du HTML) */
+  #betTimer {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10px;
+    height: 54px;
+  }
+
   .dealer-zone {
     background: linear-gradient(145deg, rgba(9,36,22,.9), rgba(5,20,12,.95));
     border: 1px solid var(--border);
     border-top: 1px solid var(--border-hi);
     border-radius: var(--radius-md);
-    padding: 14px;
-    margin-bottom: 12px;
-    text-align: center;
+    padding: 14px; margin-bottom: 12px; text-align: center;
     box-shadow: 0 8px 32px rgba(0,0,0,.4), inset 0 1px 0 rgba(201,168,76,.06);
   }
-  .zone-label {
-    font-family: 'Cinzel', serif;
-    font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
-    color: var(--gold-dk); margin-bottom: 6px;
-  }
-  .dealer-name {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(.85rem,3vw,1.05rem);
-    color: var(--gold); margin-bottom: 12px;
-    letter-spacing: .08em;
-  }
+  .zone-label  { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold-dk); margin-bottom:6px; }
+  .dealer-name { font-family:'Cinzel',serif; font-size:clamp(.85rem,3vw,1.05rem); color:var(--gold); margin-bottom:12px; letter-spacing:.08em; }
 
-  /* ══ CARTES ══ */
   .hand {
     display: flex; gap: 7px; justify-content: center; align-items: center;
-    overflow-x: auto; padding: 4px 4px 10px;
-    min-height: 96px;
+    overflow-x: auto; padding: 4px 4px 10px; min-height: 96px;
     scrollbar-width: none; -ms-overflow-style: none; flex-wrap: nowrap;
   }
   .hand::-webkit-scrollbar { display: none; }
 
   .card {
-    width: clamp(52px,14vw,68px);
-    height: clamp(74px,20vw,96px);
-    border-radius: 7px;
-    background: #fafaf8;
-    flex-shrink: 0;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: auto 1fr auto;
+    width: clamp(52px,14vw,68px); height: clamp(74px,20vw,96px);
+    border-radius: 7px; background: #fafaf8; flex-shrink: 0;
+    display: grid; grid-template-rows: auto 1fr auto; grid-template-columns: auto 1fr auto;
     padding: 4px 5px;
-    box-shadow:
-      0 2px 0 rgba(0,0,0,.15),
-      0 6px 18px rgba(0,0,0,.5),
-      inset 0 0 0 1px rgba(0,0,0,.08);
+    box-shadow: 0 2px 0 rgba(0,0,0,.15), 0 6px 18px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0,0,0,.08);
     border: none;
     animation: dealCard .38s cubic-bezier(.175,.885,.32,1.275);
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
   .card::before {
-    content: '';
-    position: absolute;
-    inset: 3px;
-    border: 1px solid rgba(0,0,0,.06);
-    border-radius: 4px;
-    pointer-events: none;
+    content: ''; position: absolute; inset: 3px;
+    border: 1px solid rgba(0,0,0,.06); border-radius: 4px; pointer-events: none;
   }
+  .card .ci-tl    { grid-row:1; grid-column:1; display:flex; flex-direction:column; align-items:center; line-height:1; }
+  .card .ci-br    { grid-row:3; grid-column:3; display:flex; flex-direction:column; align-items:center; line-height:1; transform:rotate(180deg); }
+  .card .ci-center{ grid-row:2; grid-column:1/-1; display:flex; align-items:center; justify-content:center; }
 
-  .card .ci-tl {
-    grid-row: 1; grid-column: 1;
-    display: flex; flex-direction: column; align-items: center; line-height: 1;
-  }
-  .card .ci-br {
-    grid-row: 3; grid-column: 3;
-    display: flex; flex-direction: column; align-items: center; line-height: 1;
-    transform: rotate(180deg);
-  }
-  .card .ci-center {
-    grid-row: 2; grid-column: 1 / -1;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .ci-rank { font-size: clamp(.62rem,2.2vw,.78rem); font-weight: 800; line-height: 1; font-family: 'Georgia', serif; }
-  .ci-suit { font-size: clamp(.55rem,1.8vw,.68rem); line-height: 1; }
-  .ci-suit-lg { font-size: clamp(1.2rem,4vw,1.7rem); line-height: 1; }
-
-  .card.red .ci-rank, .card.red .ci-suit, .card.red .ci-suit-lg { color: var(--red-card); }
-  .card.black-card .ci-rank, .card.black-card .ci-suit, .card.black-card .ci-suit-lg { color: #1a1a1a; }
+  .ci-rank    { font-size:clamp(.62rem,2.2vw,.78rem); font-weight:800; line-height:1; font-family:'Georgia',serif; }
+  .ci-suit    { font-size:clamp(.55rem,1.8vw,.68rem); line-height:1; }
+  .ci-suit-lg { font-size:clamp(1.2rem,4vw,1.7rem); line-height:1; }
+  .card.red        .ci-rank, .card.red        .ci-suit, .card.red        .ci-suit-lg { color:var(--red-card); }
+  .card.black-card .ci-rank, .card.black-card .ci-suit, .card.black-card .ci-suit-lg { color:#1a1a1a; }
 
   .card.hidden {
-    background: none;
-    background-color: #1a3a5c;
+    background: none; background-color: #1a3a5c;
     background-image:
-      repeating-linear-gradient(45deg, rgba(255,255,255,.04) 0, rgba(255,255,255,.04) 1px, transparent 1px, transparent 8px),
+      repeating-linear-gradient(45deg,  rgba(255,255,255,.04) 0, rgba(255,255,255,.04) 1px, transparent 1px, transparent 8px),
       repeating-linear-gradient(-45deg, rgba(255,255,255,.04) 0, rgba(255,255,255,.04) 1px, transparent 1px, transparent 8px);
     border: 2px solid rgba(255,255,255,.12);
     box-shadow: 0 6px 18px rgba(0,0,0,.5);
   }
   .card.hidden::before { border-color: rgba(255,255,255,.08); }
-  .card.hidden::after {
-    content: '♠';
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.6rem; color: rgba(255,255,255,.08);
-  }
+  .card.hidden::after  { content:'♠'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:rgba(255,255,255,.08); }
 
-  .hand-value {
-    margin-top: 8px;
-    font-family: 'Cinzel', serif;
-    font-size: clamp(.72rem,2.5vw,.88rem);
-    color: var(--cream-dim);
-    letter-spacing: .06em;
-  }
-  .hand-value .bust { color: #f87171; }
-  .hand-value .blackjack { color: var(--gold); animation: shimmer 1.4s ease-in-out infinite; }
+  .hand-value { margin-top:8px; font-family:'Cinzel',serif; font-size:clamp(.72rem,2.5vw,.88rem); color:var(--cream-dim); letter-spacing:.06em; }
+  .hand-value .bust      { color:#f87171; }
+  .hand-value .blackjack { color:var(--gold); animation:shimmer 1.4s ease-in-out infinite; }
 
   .dealer-actions { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
   .btn-dealer {
-    border: 1px solid var(--border-hi);
-    background: rgba(201,168,76,.08);
-    color: var(--gold);
-    border-radius: var(--radius-sm);
-    padding: 10px 20px;
-    cursor: pointer;
-    font-family: 'Cinzel', serif;
-    font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
-    min-height: 44px; transition: all .2s;
-    box-shadow: 0 2px 12px rgba(201,168,76,.1);
+    border:1px solid var(--border-hi); background:rgba(201,168,76,.08); color:var(--gold);
+    border-radius:var(--radius-sm); padding:10px 20px; cursor:pointer;
+    font-family:'Cinzel',serif; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
+    min-height:44px; transition:all .2s; box-shadow:0 2px 12px rgba(201,168,76,.1);
   }
-  .btn-dealer:hover { background:rgba(201,168,76,.16); box-shadow:0 4px 20px rgba(201,168,76,.2); }
-  .btn-dealer:active { transform:scale(.96); }
+  .btn-dealer:hover    { background:rgba(201,168,76,.16); box-shadow:0 4px 20px rgba(201,168,76,.2); }
+  .btn-dealer:active   { transform:scale(.96); }
   .btn-dealer:disabled { opacity:.35; cursor:not-allowed; transform:none; }
 
-  /* ══ ZONE JOUEURS ══ */
   .players-zone { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)); gap:10px; }
   .player-card {
-    background: linear-gradient(145deg, rgba(9,36,22,.88), rgba(5,20,12,.92));
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 14px; position: relative;
-    transition: all .25s;
-    box-shadow: 0 4px 16px rgba(0,0,0,.3);
+    background:linear-gradient(145deg,rgba(9,36,22,.88),rgba(5,20,12,.92));
+    border:1px solid var(--border); border-radius:var(--radius-md);
+    padding:14px; position:relative; transition:all .25s; box-shadow:0 4px 16px rgba(0,0,0,.3);
   }
   .player-card.active {
-    border-color: var(--gold);
-    border-top-color: var(--gold-lt);
-    box-shadow: 0 0 0 1px rgba(201,168,76,.12), 0 8px 32px rgba(201,168,76,.12);
-    background: linear-gradient(145deg, rgba(12,40,24,.92), rgba(8,28,16,.96));
+    border-color:var(--gold); border-top-color:var(--gold-lt);
+    box-shadow:0 0 0 1px rgba(201,168,76,.12),0 8px 32px rgba(201,168,76,.12);
+    background:linear-gradient(145deg,rgba(12,40,24,.92),rgba(8,28,16,.96));
   }
-  .player-card.done { opacity: .55; }
-  .pc-name {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(.82rem,2.8vw,.98rem);
-    color: var(--gold);
-    margin-bottom: 2px;
-    letter-spacing: .06em;
-  }
-  .pc-balance {
-    font-size: .72rem; color: var(--gold-dk);
-    margin-bottom: 10px;
-    font-family: 'Lora', serif;
-    font-style: italic;
-  }
+  .player-card.done { opacity:.55; }
+  .pc-name    { font-family:'Cinzel',serif; font-size:clamp(.82rem,2.8vw,.98rem); color:var(--gold); margin-bottom:2px; letter-spacing:.06em; }
+  .pc-balance { font-size:.72rem; color:var(--gold-dk); margin-bottom:10px; font-family:'Lora',serif; font-style:italic; }
 
   .active-badge {
-    position: absolute; top: 10px; right: 10px;
-    background: linear-gradient(135deg, var(--gold-dk), var(--gold));
-    color: #050f09;
-    font-family: 'Cinzel', serif;
-    font-size: .55rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-    padding: 3px 8px; border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(201,168,76,.3);
+    position:absolute; top:10px; right:10px;
+    background:linear-gradient(135deg,var(--gold-dk),var(--gold));
+    color:#050f09; font-family:'Cinzel',serif; font-size:.55rem; font-weight:700;
+    letter-spacing:.14em; text-transform:uppercase; padding:3px 8px; border-radius:20px;
+    box-shadow:0 2px 8px rgba(201,168,76,.3);
   }
-  .bust-badge  { background:linear-gradient(135deg,#991b1b,#dc2626) !important; color:white !important; box-shadow:0 2px 8px rgba(220,38,38,.35) !important; }
-  .stand-badge { background:linear-gradient(135deg,#1e40af,#2563eb) !important; color:white !important; box-shadow:0 2px 8px rgba(37,99,235,.35) !important; }
+  .bust-badge  { background:linear-gradient(135deg,#991b1b,#dc2626)!important; color:white!important; box-shadow:0 2px 8px rgba(220,38,38,.35)!important; }
+  .stand-badge { background:linear-gradient(135deg,#1e40af,#2563eb)!important; color:white!important; box-shadow:0 2px 8px rgba(37,99,235,.35)!important; }
 
-  /* ══ JETONS ══ */
-  .bet-section { margin-bottom: 10px; }
-  .bet-label {
-    font-family: 'Cinzel', serif;
-    font-size: .6rem; color: rgba(240,232,208,.38);
-    letter-spacing: .18em; text-transform: uppercase; margin-bottom: 8px;
-  }
+  .bet-section { margin-bottom:10px; }
+  .bet-label   { font-family:'Cinzel',serif; font-size:.6rem; color:rgba(240,232,208,.38); letter-spacing:.18em; text-transform:uppercase; margin-bottom:8px; }
   .chips { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:9px; }
   .chip {
-    width: 44px; height: 44px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Cinzel', serif; font-size: .65rem; font-weight: 700;
-    cursor: pointer; flex-shrink: 0;
-    transition: transform .12s, box-shadow .12s;
-    position: relative;
-    outline: 3px dashed rgba(255,255,255,.3);
-    outline-offset: -6px;
+    width:44px; height:44px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cinzel',serif; font-size:.65rem; font-weight:700;
+    cursor:pointer; flex-shrink:0;
+    transition:transform .12s, box-shadow .12s;
+    position:relative;
+    outline:3px dashed rgba(255,255,255,.3);
+    outline-offset:-6px;
   }
-  .chip::after {
-    content: '';
-    position: absolute; inset: 3px; border-radius: 50%;
-    border: 1px solid rgba(255,255,255,.18);
-    pointer-events: none;
-  }
+  .chip::after { content:''; position:absolute; inset:3px; border-radius:50%; border:1px solid rgba(255,255,255,.18); pointer-events:none; }
   .chip:active { transform:scale(.84); }
   .chip:hover  { transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,.5); }
-
-  .chip.c5   { background:radial-gradient(circle at 35% 35%, #f87171, var(--chip-r)); color:#fff; box-shadow:0 3px 12px rgba(220,38,38,.4), inset 0 1px 0 rgba(255,255,255,.2); }
-  .chip.c10  { background:radial-gradient(circle at 35% 35%, #60a5fa, var(--chip-b)); color:#fff; box-shadow:0 3px 12px rgba(29,78,216,.4), inset 0 1px 0 rgba(255,255,255,.2); }
-  .chip.c25  { background:radial-gradient(circle at 35% 35%, #4ade80, var(--chip-g)); color:#fff; box-shadow:0 3px 12px rgba(21,128,61,.4), inset 0 1px 0 rgba(255,255,255,.2); }
-  .chip.c50  { background:radial-gradient(circle at 35% 35%, #475569, var(--chip-k)); color:var(--gold); box-shadow:0 3px 12px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12); }
-  .chip.c100 { background:radial-gradient(circle at 35% 35%, #a78bfa, var(--chip-p)); color:#fff; box-shadow:0 3px 12px rgba(109,40,217,.4), inset 0 1px 0 rgba(255,255,255,.2); }
+  .chip.c5   { background:radial-gradient(circle at 35% 35%,#f87171,var(--chip-r)); color:#fff; box-shadow:0 3px 12px rgba(220,38,38,.4),inset 0 1px 0 rgba(255,255,255,.2); }
+  .chip.c10  { background:radial-gradient(circle at 35% 35%,#60a5fa,var(--chip-b)); color:#fff; box-shadow:0 3px 12px rgba(29,78,216,.4),inset 0 1px 0 rgba(255,255,255,.2); }
+  .chip.c25  { background:radial-gradient(circle at 35% 35%,#4ade80,var(--chip-g)); color:#fff; box-shadow:0 3px 12px rgba(21,128,61,.4),inset 0 1px 0 rgba(255,255,255,.2); }
+  .chip.c50  { background:radial-gradient(circle at 35% 35%,#475569,var(--chip-k)); color:var(--gold); box-shadow:0 3px 12px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.12); }
+  .chip.c100 { background:radial-gradient(circle at 35% 35%,#a78bfa,var(--chip-p)); color:#fff; box-shadow:0 3px 12px rgba(109,40,217,.4),inset 0 1px 0 rgba(255,255,255,.2); }
 
   .bet-display { font-size:.9rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .bet-amount  { color:var(--gold); font-weight:600; font-size:.98rem; font-family:'Cinzel',serif; letter-spacing:.04em; }
   .btn-clr {
-    background:none; border:1px solid rgba(185,28,28,.38);
-    color:#f87171; border-radius:5px; padding:3px 10px;
-    cursor:pointer; font-size:.72rem;
-    font-family:'Cinzel',serif; letter-spacing:.06em;
-    transition:all .15s;
+    background:none; border:1px solid rgba(185,28,28,.38); color:#f87171;
+    border-radius:5px; padding:3px 10px; cursor:pointer; font-size:.72rem;
+    font-family:'Cinzel',serif; letter-spacing:.06em; transition:all .15s;
   }
   .btn-clr:hover { background:rgba(185,28,28,.12); }
 
-  /* ══ BARRE MOBILE ══ */
   #actionBar {
     display:none; position:fixed; bottom:0; left:0; right:0;
-    background: rgba(3,12,7,.97);
-    border-top:1px solid var(--border-hi);
+    background:rgba(3,12,7,.97); border-top:1px solid var(--border-hi);
     padding:10px 14px calc(10px + var(--safe-b));
-    z-index:500; gap:8px;
-    backdrop-filter:blur(20px);
+    z-index:500; gap:8px; backdrop-filter:blur(20px);
   }
   #actionBar.show { display:flex; }
   .ab-btn {
     flex:1; border:none; border-radius:var(--radius-sm); min-height:54px; cursor:pointer;
     font-family:'Cinzel',serif; font-size:.82rem; font-weight:700; letter-spacing:.08em;
-    text-transform:uppercase;
-    transition:transform .12s;
+    text-transform:uppercase; transition:transform .12s;
     display:flex; align-items:center; justify-content:center; gap:5px;
   }
   .ab-btn:active { transform:scale(.9); }
@@ -486,7 +390,7 @@
 
   .inline-acts { display:none; gap:8px; flex-wrap:wrap; margin-top:12px; }
   .ia-btn {
-    flex:1; border:none; border-radius:var(--radius-sm); padding:10px 10px; cursor:pointer;
+    flex:1; border:none; border-radius:var(--radius-sm); padding:10px; cursor:pointer;
     font-family:'Cinzel',serif; font-size:.76rem; font-weight:700; letter-spacing:.08em;
     text-transform:uppercase; min-height:42px; transition:all .2s;
   }
@@ -496,7 +400,6 @@
   .ia-stand  { background:linear-gradient(145deg,#991b1b,#dc2626); color:#fff; }
   .ia-double { background:linear-gradient(145deg,var(--gold-dk),var(--gold)); color:#050f09; }
 
-  /* ══ BANNIÈRE DRAMATIQUE ══ */
   .drama-banner {
     text-align:center; font-family:'Cinzel',serif;
     font-size:clamp(1rem,4vw,1.8rem); font-weight:700; letter-spacing:.06em;
@@ -504,35 +407,32 @@
     animation:popIn .6s cubic-bezier(.175,.885,.32,1.275);
   }
   .drama-win  { background:rgba(201,168,76,.07); border:1px solid rgba(201,168,76,.4); color:var(--gold); }
-  .drama-lose { background:rgba(185,28,28,.1); border:1px solid rgba(185,28,28,.45); color:#f87171; }
+  .drama-lose { background:rgba(185,28,28,.1);   border:1px solid rgba(185,28,28,.45); color:#f87171; }
 
-  /* ══ RÉSULTATS ══ */
   #screenResults { display:none; min-height:100vh; padding:24px 14px 50px; }
   .results-title {
     font-family:'Cinzel Decorative',serif;
     font-size:clamp(1.6rem,7vw,3rem); color:var(--gold);
     text-align:center; margin-bottom:24px;
-    text-shadow:0 0 40px rgba(201,168,76,.3);
-    letter-spacing:.04em;
+    text-shadow:0 0 40px rgba(201,168,76,.3); letter-spacing:.04em;
   }
   .results-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,185px),1fr)); gap:12px; max-width:700px; margin:0 auto 28px; }
   .result-card {
-    background: linear-gradient(145deg, rgba(9,36,22,.9), rgba(5,20,12,.95));
+    background:linear-gradient(145deg,rgba(9,36,22,.9),rgba(5,20,12,.95));
     border-radius:var(--radius-md); padding:20px; text-align:center;
-    border:1px solid var(--border);
-    box-shadow:0 4px 16px rgba(0,0,0,.4);
+    border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,.4);
     animation:popIn .5s cubic-bezier(.175,.885,.32,1.275) both;
   }
-  .result-card.win  { border-color:rgba(21,128,61,.6); background:linear-gradient(145deg,rgba(5,46,22,.92),rgba(3,30,14,.96)); box-shadow:0 4px 24px rgba(21,128,61,.15); }
-  .result-card.lose { border-color:rgba(185,28,28,.55); background:linear-gradient(145deg,rgba(46,5,5,.92),rgba(30,3,3,.96)); box-shadow:0 4px 24px rgba(185,28,28,.12); }
+  .result-card.win  { border-color:rgba(21,128,61,.6);  background:linear-gradient(145deg,rgba(5,46,22,.92),rgba(3,30,14,.96));   box-shadow:0 4px 24px rgba(21,128,61,.15); }
+  .result-card.lose { border-color:rgba(185,28,28,.55); background:linear-gradient(145deg,rgba(46,5,5,.92),rgba(30,3,3,.96));     box-shadow:0 4px 24px rgba(185,28,28,.12); }
   .result-card.push { border-color:rgba(201,168,76,.4); }
-  .r-name     { font-family:'Cinzel',serif; font-size:clamp(.88rem,3.5vw,1.05rem); color:var(--gold); margin-bottom:7px; letter-spacing:.08em; }
-  .r-outcome  { font-family:'Cinzel Decorative',serif; font-size:clamp(1.3rem,5vw,1.6rem); font-weight:700; margin-bottom:5px; }
+  .r-name    { font-family:'Cinzel',serif; font-size:clamp(.88rem,3.5vw,1.05rem); color:var(--gold); margin-bottom:7px; letter-spacing:.08em; }
+  .r-outcome { font-family:'Cinzel Decorative',serif; font-size:clamp(1.3rem,5vw,1.6rem); font-weight:700; margin-bottom:5px; }
   .r-outcome.win  { color:#4ade80; }
   .r-outcome.lose { color:#f87171; }
   .r-outcome.push { color:var(--gold); }
-  .r-money    { font-size:.85rem; color:rgba(240,232,208,.55); margin-top:2px; font-style:italic; }
-  .r-balance  { font-family:'Cinzel',serif; font-size:.82rem; color:var(--cream); margin-top:6px; letter-spacing:.04em; }
+  .r-money   { font-size:.85rem; color:rgba(240,232,208,.55); margin-top:2px; font-style:italic; }
+  .r-balance { font-family:'Cinzel',serif; font-size:.82rem; color:var(--cream); margin-top:6px; letter-spacing:.04em; }
 
   .divider { display:flex; align-items:center; gap:10px; margin:16px auto; opacity:.2; max-width:700px; padding:0 14px; }
   .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--gold); }
@@ -545,45 +445,41 @@
     border:none; border-radius:var(--radius-sm); padding:15px 18px;
     color:#050f09; font-family:'Cinzel',serif; font-size:.88rem; font-weight:700;
     letter-spacing:.12em; text-transform:uppercase; cursor:pointer; min-height:52px;
-    box-shadow:0 4px 20px rgba(201,168,76,.28);
-    transition:all .25s;
+    box-shadow:0 4px 20px rgba(201,168,76,.28); transition:all .25s;
   }
-  .btn-new-round:hover { background-position:100% 0; }
+  .btn-new-round:hover  { background-position:100% 0; }
   .btn-new-round:active { transform:scale(.97); }
   .btn-chg-table {
     flex:1; min-width:110px; background:none;
-    border:1px solid var(--border-hi);
-    border-radius:var(--radius-sm); padding:15px 18px; color:var(--gold-dk);
+    border:1px solid var(--border-hi); border-radius:var(--radius-sm);
+    padding:15px 18px; color:var(--gold-dk);
     font-family:'Cinzel',serif; font-size:.82rem; letter-spacing:.1em; text-transform:uppercase;
     cursor:pointer; min-height:52px; transition:all .2s;
   }
-  .btn-chg-table:hover { color:var(--gold); border-color:var(--gold); }
+  .btn-chg-table:hover  { color:var(--gold); border-color:var(--gold); }
   .btn-chg-table:active { background:rgba(201,168,76,.06); }
 
-  /* ══ TOAST ══ */
   #toast {
     position:fixed; top:14px; left:50%;
     transform:translateX(-50%) translateY(-120px);
-    background:linear-gradient(135deg, rgba(18,45,30,.98), rgba(12,32,20,.99));
-    border:1px solid var(--border-hi);
-    color:var(--gold);
+    background:linear-gradient(135deg,rgba(18,45,30,.98),rgba(12,32,20,.99));
+    border:1px solid var(--border-hi); color:var(--gold);
     padding:9px 22px; border-radius:30px;
     font-family:'Cinzel',serif; font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
-    box-shadow:0 4px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(201,168,76,.1);
+    box-shadow:0 4px 24px rgba(0,0,0,.5),0 0 0 1px rgba(201,168,76,.1);
     transition:transform .35s cubic-bezier(.175,.885,.32,1.275);
     z-index:3000; white-space:nowrap; max-width:92vw; text-align:center;
   }
   #toast.show { transform:translateX(-50%) translateY(0); }
 
-  /* ══ DESKTOP ══ */
   @media(min-width:700px) {
-    #screenGame { padding:20px; }
-    #actionBar  { display:none !important; }
+    #screenGame  { padding:20px; }
+    #actionBar   { display:none !important; }
     .inline-acts { display:flex !important; }
     .dealer-zone { padding:22px; margin-bottom:16px; }
-    .card { width:68px; height:96px; }
-    .chip { width:42px; height:42px; }
-    .players-zone { gap:14px; }
+    .card        { width:68px; height:96px; }
+    .chip        { width:42px; height:42px; }
+    .players-zone{ gap:14px; }
     .player-card { padding:18px; }
   }
 </style>
@@ -653,6 +549,8 @@
     <button class="btn-quit" onclick="window.gameActions.leaveRoom()">↩ Quitter</button>
   </div>
   <div class="phase-banner" id="phaseBanner"></div>
+  <!-- AJOUTÉ : Timer de mise (référencé dans ui.js mais manquant dans le HTML) -->
+  <div id="betTimer"></div>
   <div class="dealer-zone">
     <div class="zone-label">♦ Croupier ♦</div>
     <div class="dealer-name" id="dealerName"></div>
