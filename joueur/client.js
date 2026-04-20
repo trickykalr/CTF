@@ -68,6 +68,32 @@ window.gameActions = {
   removeBot(id)  { socket.emit('removeBot',   {botSocketId:id}, r => { if(!r?.ok) UI.showToast(r?.error||'Erreur'); }); },
   kickPlayer(id) { socket.emit('kickPlayer',  {targetSocketId:id}, r => { if(!r?.ok) UI.showToast(r?.error||'Impossible'); }); },
   showInvite()   { socket.emit('getInviteCode', null, r => { if(r?.ok) UI.showInviteModal(r.code); }); },
+
+  // ── Assurance (NOUVEAU) ──────────────────────────────────
+  takeInsurance(amount) {
+    socket.emit('takeInsurance', {amount}, r => {
+      if (!r?.ok) UI.showToast(r?.error || 'Assurance impossible');
+    });
+  },
+  declineInsurance() {
+    socket.emit('declineInsurance', null, r => {
+      if (!r?.ok) UI.showToast(r?.error || 'Erreur');
+    });
+  },
+
+  // ── Options de partie (NOUVEAU) ──────────────────────────
+  setOptions() {
+    const numDecks   = parseInt(document.getElementById('optNumDecks')?.value   || 2);
+    const bjPayout   = parseFloat(document.getElementById('optBjPayout')?.value || 1.5);
+    const betTimerSec= parseInt(document.getElementById('optBetTimer')?.value   || 45);
+    const maxBet     = parseInt(document.getElementById('optMaxBet')?.value     || 500);
+    const maxSplits  = parseInt(document.getElementById('optMaxSplits')?.value  || 1);
+    socket.emit('setOptions', { numDecks, bjPayout, betTimerSec, maxBet, maxSplits }, r => {
+      if (!r?.ok) UI.showToast(r?.error || 'Erreur options');
+      else UI.showToast('Options mises à jour ✓');
+    });
+  },
+
   leaveRoom() {
     socket.emit('leaveRoom', null, () => {
       ['screenLobby','screenGame','screenResults'].forEach(id => {
